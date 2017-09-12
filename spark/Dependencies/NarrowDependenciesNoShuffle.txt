@@ -1,0 +1,4 @@
+[] ===> []
+only one child
+
+like map, filter, union,  join(has already partitioned)...

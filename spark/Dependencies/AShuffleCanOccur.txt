@@ -1,0 +1,2 @@
+A shuffle can occur when the resulting RDD depends on other 
+elements from the same RDD or another RDD
