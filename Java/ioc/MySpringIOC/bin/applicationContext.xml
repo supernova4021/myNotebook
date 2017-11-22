@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+	<bean id="blacksmith" class="com.me.bean.Blacksmith" scope="singleton">
+	</bean>
+	<bean id="a"  class="com.me.bean.A" scope="singleton">
+		<property name="name" value="jack"></property>
+		<property name="age" value="233"></property>
+	</bean>
+	<!-- prototype，原型，按照原型，可以创建多个不同的对象出来 -->
+	<bean id="b" class="com.me.bean.B" scope="prototype">
+		<property name="a" ref="a"></property>
+	</bean>
+</beans>
