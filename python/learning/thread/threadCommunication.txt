@@ -1,0 +1,12 @@
+from threading import Event
+
+e1.wait()
+# do something.....
+
+
+
+
+e1.set() # notify t1 to do something
+e1.clear() # reuse e1
+
+# t1.setDaemon(True)
