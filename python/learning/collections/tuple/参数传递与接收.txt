@@ -1,0 +1,25 @@
+
+def ask(*args, **kwargs):
+	# args
+	# ask(("bobby",1,2,3))
+	
+	# keyword args
+	# ask(name="bobby",age=22)
+	
+	pass
+
+
+
+def func_demo(a, b=1, *c, d, **e):
+      pass
+
+
+a : 位置参数, 从左到右匹配
+
+b : 默认参数, 为没有传入值的参数定义参数值
+
+c : 可变参数(元组), 收集 任意多 基于 "位置" 或 关键字 的 参数
+
+d : Keyword-only 参数, 参数必须按照 名称 传递
+
+e : 可变参数(字典), 收集 "字典"中 所有包含位置的参数
