@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset = utf-8"/>
+		<title>WebSocket客户端</title>
+	</head>
+	<body>
+		<form onSubmit="return false;">
+			<input type = "text" name = "message" value = ""/>
+			<br/><br/>
+			<input type = "button" value = "发送WebSocket请求消息" onClick = "send(this.form.message.value)"/>
+			<hr color="red"/>
+			<h2>客户端接收到服务端返回的应答消息</h2>
+			<textarea id = "responseContent" style = "width:1024px; height:300px"></textarea>
+		</form>
+	</body>
+	<script type="text/javascript">
+		var socket;
+		
+		(function(){
+			if(!window.WebSocket){//不存在？使用MozWebSocket(如果存在)
+				window.WebSocket = window.MozWebSocket;
+			}
+			
+			if(!window.WebSocket){
+				
+				return;
+			}
+			
+			socket = new WebSocket("ws://localhost:8888/websocket");
+			
+			var txtarea = document.getElementById("responseContent");
+			socket.onmessage = function(event){
+				txtarea.value += event.data + "\r\n";
+			};
+			
+			socket.onopen = function(){
+				txtarea.value = "给服务端发送消息.....";
+			}
+			
+			socket.onclose = function(){
+				txtarea.value = "websocket连接已关闭";
+			}
+		})();
+		
+		function send(message){
+			if(!window.WebSocket){
+				return;
+			}
+			
+			if(socket.readyState == WebSocket.OPEN){
+				socket.send(message);
+			}else{
+				alert("连接服务器失败！")
+			}
+		}
+	
+	
+	</script>
+</html>
