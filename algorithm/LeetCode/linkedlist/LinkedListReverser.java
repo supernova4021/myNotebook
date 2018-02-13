@@ -6,8 +6,8 @@ public class LinkedListReverser {
 		Node newHead = null; 
 		Node currentHead = head;
 		//loop invariant:
-		//newHead: the head of linkedlist that has been reversed 
-		//currentHead: the head of linkedlist that has not been reversed
+		//the head of linkedlist that has been reversed 
+		//the head of linkedlist that has not been reversed
 		while(currentHead != null){
 			// loop invariant holds
 			Node currentNextNode = currentHead.getNext();
