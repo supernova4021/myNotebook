@@ -1,1 +1,2 @@
 Chrome 隐身窗口
+勾选上disable cache2
