@@ -1,0 +1,76 @@
+PUT lagou
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 1
+    }
+  } 
+  
+}
+
+GET lagou/_settings
+GET _all/_settings
+GET .kibana, lagou/_settings
+GET _settings
+
+# 修改settings
+PUT lagou/_settings
+{
+  "number_of_replicas": 2
+}
+
+# 获取索引信息
+GET _all
+GET lagou
+
+# 保存文档
+# index/type/documents/fields 数据库/表/行/列
+POST lagou/job/1
+{
+  "title":"百度外卖派送",
+  "salary":5000,
+  "city":"Moon",
+  "company":{
+    "name":"asfasfa",
+    "addr":"Mars"
+  }
+}
+# 不指定id则自动生成uuid
+POST lagou/job/
+{
+  "title":"阿里外卖派送",
+  "salary":1000,
+  "city":"Moon",
+  "company":{
+    "name":"asfasfa",
+    "addr":"Mars"
+  }
+}
+
+# 获取部分信息
+GET lagou/job/1?_source=title
+GET lagou/job/1?_source=title,salary
+GET lagou/job/1?_source
+
+# 修改文档
+PUT lagou/job/1
+{
+  "title":"百度云外卖派送",
+  "salary":10000,
+  "city":"Moon",
+  "company":{
+    "name":"asfasfa",
+    "addr":"Mars"
+  }
+}
+POST lagou/job/1/_update
+{
+  "doc":{
+    "salary":1111
+  }
+}
+
+# 删除
+DELETE lagou/job/1
+DELETE lagou

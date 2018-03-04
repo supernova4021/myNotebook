@@ -1,0 +1,49 @@
+# 批量查询 
+GET _mget
+{
+  "docs":[
+    {"_index":"lagou",
+      "type":"job",
+      "_id":1
+    },
+    {"_index":"boss",
+      "type":"job",
+      "_id":111
+    }
+    ]
+}
+GET lagou/_mget
+{
+    "docs":[
+    {
+      "type":"job",
+      "_id":1
+    }]
+}
+GET lagou/job/_mget
+{
+    "docs":[
+    {
+      "_id":1
+    }]
+}
+GET lagou/job/_mget
+{
+    "ids":[1,2,111,222]
+}
+
+# bulk操作
+# action_and_meta_data
+# optional_source
+# ......
+# action_and_meta_data
+# optional_source  # must in one line
+POST _bulk
+  {"index":{"_index":"lagou","_type":"job","_id":"123"}}
+  {"title": "百度云外卖派送","salary": 10000}
+  {"delete":{"_index":"lagou","_type":"job","_id":"123"}}
+  {"create":{"_index":"lagou","_type":"job","_id":"212"}}
+  {"title": "233娘手办","price": 10000}
+  {"update":{"_index":"lagou","_type":"job","_id":"212"}}
+  {"doc":{"price": 9999}}
+  
