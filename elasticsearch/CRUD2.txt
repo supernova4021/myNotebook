@@ -1,3 +1,5 @@
+GET lagou/_mapping  # 获取mapping(index(table) info)
+
 # 批量查询 
 GET _mget
 {
