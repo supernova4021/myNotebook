@@ -1,0 +1,17 @@
+-Xmx -Xms
+
+-Xmx200m -Xms5m
+
+-Xmn  --设置新生代大小
+-XX:NewRatio   --老年代与新生代的比值  4 --> 新生:老年=1:4
+-XX:SuriviorRatio  --eden和两个Surivivor区的比值  
+
+
+-XX:+HeapDumpOnOutOfMemoryError  --发生OOM时导出堆到文件
+-XX:+HeapDumpPath
+-XX:+HeapDumpOnOutOfMemoryError='...../.sh'
+
+
+官方推荐新生代占堆的3/8
+幸存代占新生代的1/10
+OOM时dump出堆

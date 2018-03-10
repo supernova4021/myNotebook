@@ -1,0 +1,13 @@
+打印GC简要信息
+-verbose:gc
+-XX:+printGC
+
+-XX:+PrintGCDetails
+-XX:+PrintGCTimeStamps	 -- 打印GC发生时间戳
+-XX:+PrintHeapAtGC
+
+-Xloggc:log/gc.log   -- 指定GC log的位置
+
+
+-XX:+TraceClassLoading	-- 监控类的加载
+-XX:+PrintClassHistogram   --- instances  #bytes(occupied spaces)  calssName
