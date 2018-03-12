@@ -1,0 +1,4 @@
+可能会发生ArrayIndexOutOfBoundsException
+一个线程把ArrayList填满了而正在扩展ArrayList的过程中，
+此时ArrayList不应该被别的线程访问
+如果另一个线程正在ArrayList扩展时尝试添加元素，由于扩展还未完成，数组还是满的话就会抛出上述异常
