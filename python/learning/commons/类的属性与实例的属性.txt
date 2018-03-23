@@ -1,0 +1,5 @@
+class Test(object):
+     val = 1  # 属于类的属性
+
+     def __init__(self):
+         self.val = 2 # 属于实例的属性
