@@ -1,0 +1,4 @@
+PYTHONPATH是Python搜索路径，默认我们import的模块都会从PYTHONPATH里面寻找。
+
+打印PYTHONPATH：
+print(os.sys.path)
