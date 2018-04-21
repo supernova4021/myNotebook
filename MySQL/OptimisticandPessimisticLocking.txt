@@ -1,0 +1,8 @@
+悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。
+如Java synchronized 就属于悲观锁的一种实现，每次线程要修改数据时都先获得锁，
+保证同一时刻只有一个线程能操作数据，其他线程则会被block
+
+
+乐观锁（Optimistic Lock），顾名思义，就是很乐观，每次去拿数据的时候都认为别人不会修改，所以不会上锁
+如java.util.concurrent.atomic包下的原子类就是乐观锁的一种实现，
+通过CAS（Compare And Swap 或 Compare And Set)来实现原子操作
