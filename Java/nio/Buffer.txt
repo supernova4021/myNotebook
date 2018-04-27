@@ -2,22 +2,21 @@ Buffer是Channel（铁路）上的火车，负责存储数据
 
 对于不同数据类型，提供了对应类型的缓冲区( ByteBuffer, CharBuffer...........
 
+allocate()分配非直接缓冲区，buffer建立在JVM内存中
+allocateDirect()分配直接缓冲区，buffer建立在物理内存中，效率高，但消耗大、不易控制
+
 核心属性：
 capacity
-这个Buffer最多能放多少数据。capacity一般在buffer被创建的时候指定。
+最大数据容量，创建后就不能改变
 
 limit
-在Buffer上进行的读写操作都不能越过这个下标。当写数据到buffer中时，limit一般和capacity相等，当读数据时，
-limit代表buffer中有效数据的长度。
+表示buffer中有效数据的长度。
 
 position
-读/写操作的当前下标。当使用buffer的相对位置进行读/写操作时，读/写会从这个下标进行，并在操作完成后，
-buffer会更新下标的值。
+正在操作数据的位置
 
 mark
-一个临时存放的位置下标。调用mark()会将mark设为当前的position的值，以后调用reset()会将position属性设
-置为mark的值。mark的值总是小于等于position的值，如果将position的值设的比mark小，当前的mark值会被抛弃掉。
-这些属性总是满足以下条件：
+记录当前position的位置，可通过reset方法把position恢复到mark的位置
 0 <= mark <= position <= limit <= capacity
 
 
@@ -45,4 +44,4 @@ public final Buffer rewind() {
     mark = -1;   
     return this;   
 } 
-把position设为0，limit不变，一般在把数据重写入Buffer前调用。
+可重复读数据
