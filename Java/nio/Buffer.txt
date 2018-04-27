@@ -1,0 +1,48 @@
+Buffer是Channel（铁路）上的火车，负责存储数据
+
+对于不同数据类型，提供了对应类型的缓冲区( ByteBuffer, CharBuffer...........
+
+核心属性：
+capacity
+这个Buffer最多能放多少数据。capacity一般在buffer被创建的时候指定。
+
+limit
+在Buffer上进行的读写操作都不能越过这个下标。当写数据到buffer中时，limit一般和capacity相等，当读数据时，
+limit代表buffer中有效数据的长度。
+
+position
+读/写操作的当前下标。当使用buffer的相对位置进行读/写操作时，读/写会从这个下标进行，并在操作完成后，
+buffer会更新下标的值。
+
+mark
+一个临时存放的位置下标。调用mark()会将mark设为当前的position的值，以后调用reset()会将position属性设
+置为mark的值。mark的值总是小于等于position的值，如果将position的值设的比mark小，当前的mark值会被抛弃掉。
+这些属性总是满足以下条件：
+0 <= mark <= position <= limit <= capacity
+
+
+Buffer clear()
+public final Buffer clear() {   
+    position = 0;      //设置为0
+    limit = capacity;    //极限和容量相同
+    mark = -1;   //取消标记
+    return this;   
+} 
+把position设为0，把limit设为capacity，一般在把数据写入Buffer前调用。
+ 
+Buffer flip()
+public final Buffer flip() {   
+     limit = position;    
+     position = 0;   
+     mark = -1;   
+     return this;   
+} 
+把limit设为当前position，把position设为0，一般在从Buffer读出数据前调用。
+ 
+Buffer rewind()
+public final Buffer rewind() {   
+    position = 0;   
+    mark = -1;   
+    return this;   
+} 
+把position设为0，limit不变，一般在把数据重写入Buffer前调用。
