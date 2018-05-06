@@ -1,0 +1,1 @@
+Major GC清理Tenured区，用于回收老年代，出现Major GC通常会出现至少一次Minor GC。
