@@ -1,0 +1,16 @@
+class Solution {
+public:
+    //对于曲线f(x) = x^2-a
+    // f(x)与x轴的交点的x就是a的平方根
+    // 对f(x)求导，得f'(x) = 2x，则在x`点的切线斜率为2x'
+    // 由点斜式得y-b=k(x-a) ---》 切线y=2x'(x-x')+x'^2-a   x'为估值
+    // 该切线与x轴的交点为x=(x'+a/x')/2
+    int mySqrt(int x) {
+        double ans = x;
+        double delta = 0.0001;
+        while (fabs(pow(ans, 2) - x) > delta) { // fabs --> f abs 
+            ans = (ans + x / ans) / 2;
+        }
+        return ans;
+    }
+};
