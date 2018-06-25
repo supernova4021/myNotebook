@@ -1,0 +1,4 @@
+.........class file 'D:\Program Files\Java\jdk1.8.0_101\jre\lib\rt.jar' is broken.........
+Solution：
+Option 1: Using java 7 with scala 2.7.2
+Option 2: Using another version of scala (2.11.4), and java 8
