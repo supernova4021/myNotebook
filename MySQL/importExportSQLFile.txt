@@ -1,0 +1,3 @@
+mysql -uroot -p23456 movie < movie.sql
+
+mysqldump --master-data=2 --single-transaction --routines --triggers --events -uroot -p movie > movie.sql
