@@ -51,3 +51,5 @@ DF:
 DS:
 	ds.map(line => line.itemid)  compile no
 
+注意：
+自己new出来的HashMap之类的东西，是无法存储spark内部迭代计算出来的结果，因为是在一个cluster上，new出来的只是在一台机器的内存中
