@@ -1,0 +1,3 @@
+use reduceByKey first before the groupByKey operation to reduce shuffling
+
+first reduce by key at each partition, and then there are no much key left, so then groupByKey may have less k-v pairs to move around the network
