@@ -1,0 +1,4 @@
+1、IO多路复用epoll
+2、轻量级：功能模块少、代码模块化
+3、CPU亲和： 把CPU core与nginx进程绑定，把每个worker进程固定在一个cpu上执行，减少切换cpu的cache miss
+4、sendfile
