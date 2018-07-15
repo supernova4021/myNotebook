@@ -1,0 +1,5 @@
+目录中随机选择一个主页
+
+    location / {
+       random_index on;
+    }

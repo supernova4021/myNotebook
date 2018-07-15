@@ -1,0 +1,11 @@
+nginx客户端状态
+
+    location /mystatus {
+       stub_status;
+    }
+
+http://47.106.115.184/mystatus
+Active connections: 1 
+server accepts handled requests
+         8      8       8 
+Reading: 0 Writing: 1 Waiting: 0 
