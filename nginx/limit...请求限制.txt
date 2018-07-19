@@ -1,0 +1,72 @@
+连接(HTTP连接)频率限制 (HTTP1.1以上, 一次TCP连接可以有多次HTTP连接)
+Syntax: limit_conn_zone key zone=name:size;
+Default: ---
+Context:http
+
+Syntax: limit_conn_zone zone number;
+Default: ---
+Context:http, server, location
+
+
+请求(request)频率限制
+Syntax: limit_req_zone key zone=name:size rate=rate;
+Default: ---
+Context:http
+
+Syntax: limit_conn_zone zone=name [burst=number][nodelay];
+Default: ---
+Context:http, server, location
+
+example1:
+http {
+    limit_conn_zone $binary_remote_addr zone=conn_zone01:10m;  #开辟一个以remote_addr(二进制的形式存储)为key的空间来存储用户连接状态(session，因为要对请求进行限制，因此需存储之前的请求状态)
+    limit_req_zone $binary_remote_addr zone=req_zone01:10m   rate=10r/s;   其中$binary_remote_addr有时需要根据自己已有的log_format变量配置进行替换
+    server {
+        
+	location / {
+           root /opt/app/code;
+           limit_conn conn_zone 1; #同一时刻只允许一个ip连接
+	   limit_req zone=req_zone01 burst=3 nodelay;
+	   index index.html index.htm
+	}
+        
+    }
+}
+
+example2:
+http{
+    ...
+    #定义一个名为allips的limit_req_zone用来存储session，大小是10M内存，
+    #以$binary_remote_addr 为key,限制平均每秒的请求为20个，
+    #1M能存储16000个状态，rete的值必须为整数，
+    #如果限制两秒钟一个请求，可以设置成30r/m
+    limit_req_zone $binary_remote_addr zone=allips:10m rate=20r/s;
+    ...
+    server{
+        ...
+        location {
+            ...
+            #限制每ip每秒不超过20个请求，漏桶数burst为5
+            #brust的意思就是，如果第1秒、2,3,4秒请求为19个，
+            #第5秒的请求为25个是被允许的。
+            #但是如果你第1秒就25个请求，第2秒超过20的请求返回503错误。
+            #nodelay，如果不设置该选项，严格使用平均速率限制请求数，
+            #第1秒25个请求时，5个请求放到第2秒执行，
+            #设置nodelay，25个请求将在第1秒执行。
+            limit_req zone=allips burst=5 nodelay;
+            ...
+        }
+        ...
+    }
+    ...
+}
+
+限制下载速度：
+location /download { 
+    limit_rate 128k; 
+}
+下载文件的前10m大小时不限速：
+location /download { 
+       limit_rate_after 10m; 
+       limit_rate 128k; 
+} 
