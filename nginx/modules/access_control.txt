@@ -1,0 +1,24 @@
+http_access_module有局限性: 
+如果client使用了proxy，会禁掉了proxy层的ip而没禁掉真正想禁的client的ip
+
+http_x_forwarded_for = client IP, proxy(1) IP, proxy(2) IP, .....
+http_x_forwarded_for是http头信息，容易被修改
+
+http_access_module的简单配置：
+server {
+    listen       80;
+    server_name  localhost;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+    location ~ ^/admin.html {
+        root   /opt/app/code;
+	# 访问规则按顺序匹配，满足一个就则执行deny或allow
+	deny  222.128.189.11;
+	allow all;
+        index  index.html  index.html;
+    }
+}
