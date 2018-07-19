@@ -1,0 +1,7 @@
+用户名和密码文件可借助htpasswd工具来编写
+    location ~ ^/admin.html {
+        root   /opt/app/code;
+        auth_basic "please input your passward!";
+        auth_basic_user_file /etc/nginx/auth_conf;
+	index   index.html  index.htm
+    }
