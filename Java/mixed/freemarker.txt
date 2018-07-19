@@ -1,0 +1,2 @@
+防止freemarker格式化数字
+<#setting number_format="#">
