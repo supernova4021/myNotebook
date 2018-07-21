@@ -1,0 +1,11 @@
+缓冲区
+proxy_buffering
+
+跳转重定向
+proxy_redirect
+
+头信息
+proxy_set_header
+
+连接超时
+proxy_connect_timeout
