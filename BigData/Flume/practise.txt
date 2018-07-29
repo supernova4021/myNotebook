@@ -1,0 +1,143 @@
+图文并茂的文档：http://flume.apache.org/FlumeUserGuide.html
+
+http://archive.cloudera.com/cdh5/cdh/5/
+
+http://archive.cloudera.com/cdh5/cdh/5/flume-ng-1.6.0-cdh5.7.0.tar.gz
+
+flume-env.sh:
+    export JAVA_HOME=....
+--------------------A simple example-------------------------
+----------采集指定的网络端口的数据，将其输出到控制台--------------------
+# example.conf: A single-node Flume configuration
+
+# Name the components on this agent
+a1.sources = r1
+a1.sinks = k1
+a1.channels = c1
+
+# Describe/configure the source
+a1.sources.r1.type = netcat
+a1.sources.r1.bind = localhost
+a1.sources.r1.port = 44444
+
+# Describe the sink
+a1.sinks.k1.type = logger
+
+# Use a channel which buffers events in memory
+a1.channels.c1.type = memory
+
+# Bind the source and sink to the channel
+# to channels c1..
+a1.sources.r1.channels = c1
+# from channel c1...
+a1.sinks.k1.channel = c1
+
+启动agent:
+flume-ng agent \
+--name a1 \
+--conf $FLUME_HOME/conf \
+--conf-file $FLUME_HOME/conf/example.conf \
+-Dflume.root.logger=INFO,console
+
+test:
+$ telnet localhost 44444
+Trying 127.0.0.1...
+Connected to localhost.localdomain (127.0.0.1).
+Escape character is '^]'.
+Hello world! <ENTER>
+OK
+
+---------------------------------------------------------------------------------------
+
+--------------------A simple example2-------------------------
+----------监控一个文件，实时采集新增的数据，将其输出到控制台--------------------
+# example.conf: A single-node Flume configuration
+
+# Name the components on this agent
+a1.sources = r1
+a1.channels = c1
+a1.sinks = k1
+
+a1.sources.r1.type = exec
+a1.sources.r1.command = tail -F /var/log/secure
+a1.sources.r1.shell = /bin/bash -c
+
+# Describe the sink
+a1.sinks.k1.type = logger
+
+# Use a channel which buffers events in memory
+a1.channels.c1.type = memory
+
+# Bind the source and sink to the channel
+# to channels c1
+a1.sources.r1.channels = c1
+# from channel c1...
+a1.sinks.k1.channel = c1
+
+启动agent:
+flume-ng agent \
+--name a1 \
+--conf $FLUME_HOME/conf \
+--conf-file $FLUME_HOME/conf/exec-memory-logger.conf \
+-Dflume.root.logger=INFO,console
+
+------------------------------------------------------------------------
+
+****************************************** utility example *************************************************************
+--------------------把192.168.12.122主机的/var/log/secure日志的实时变化数据flume到主机192.168.12.123的控制台输出上---------------------------------
+# agent name: exec-memory-avro  (source-channel-sink)
+# exec-memory-avro.conf:
+
+exec-memory-avro.sources = exec-source
+exec-memory-avro.channels = memory-channel
+exec-memory-avro.sinks = avro-sink
+
+exec-memory-avro.sources.exec-source.type = exec
+exec-memory-avro.sources.exec-source.command = tail -F /var/log/secure
+exec-memory-avro.sources.exec-source.shell = /bin/bash -c
+
+exec-memory-avro.sinks.avro-sink.type = avro
+exec-memory-avro.sinks.avro-sink.hostname = 192.168.12.123
+exec-memory-avro.sinks.avro-sink.port = 44444
+
+exec-memory-avro.channels.memory-channel.type = memory
+
+exec-memory-avro.sources.exec-source.channels = memory-channel
+exec-memory-avro.sinks.avro-sink.channel = memory-channel
+
+
+# avro-memory-logger.conf:
+
+avro-memory-logger.sources = avro-source
+avro-memory-logger.channels = memory-channel
+avro-memory-logger.sinks = logger-sink
+
+avro-memory-logger.sources.avro-source.type = avro
+avro-memory-logger.sources.avro-source.command = tail -F /var/log/secure
+avro-memory-logger.sources.avro-source.shell = /bin/bash -c
+
+avro-memory-logger.sinks.avro-source.type = avro
+avro-memory-logger.sinks.avro-source.hostname = 192.168.12.122
+avro-memory-logger.sinks.avro-source.port = 44444
+
+avro-memory-logger.sinks.logger-sink.type = logger
+
+avro-memory-logger.channels.memory-channel.type = memory
+
+avro-memory-logger.sources.avro-source.channels = memory-channel
+avro-memory-logger.sinks.logger-sink.channel = memory-channel
+
+先启动avro-memory-logger:
+flume-ng agent \
+--name avro-memory-logger \
+--conf $FLUME_HOME/conf \
+--conf-file $FLUME_HOME/conf/avro-memory-logger.conf \
+-Dflume.root.logger=INFO,console
+
+再启动exec-memory-avro:
+flume-ng agent \
+--name exec-memory-avro \
+--conf $FLUME_HOME/conf \
+--conf-file $FLUME_HOME/conf/exec-memory-avro.conf \
+-Dflume.root.logger=INFO,console
+*******************************************************************************************************
