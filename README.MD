@@ -1,1 +1,2 @@
-一些乱七八糟的笔记
+# myNotebook
+I love study，and study makes me happy.
