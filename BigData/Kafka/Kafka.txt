@@ -1,0 +1,106 @@
+Kafka架构
+	producer: 生产者
+	consumer: 消费者
+	broker: 装着生产出来的物品的那个篮子
+	topic: 分类的物品，给每个物品贴上的标签(消费者会根据标签进行消费)
+
+	
+********************************Kafka 0.9.0(may be outdated)***************************
+
+------------------------------------单节点单broker-------------------------------------	
+server.properties配置文件
+$KAFKA_HOME/config/server.properties:
+# The id of the broker. This must be set to a unique integer for each broker.
+broker.id=0
+
+listeners=PLAINTEXT://:9092
+
+# Hostname the broker will bind to. If not set, the server will bind to all interfaces
+host.name=localhost
+
+# A comma seperated list of directories under which to store log files
+log.dirs=/tmp/kafka-logs
+
+Step 2: Start the server
+kafka-server-start.sh $KAFKA_HOME/config/server.properties &
+(jps -m 查看详细信息 )
+
+Step 3: Create a topic (zookeeper)
+kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic hell2
+# list the topics
+kafka-topics.sh --list --zookeeper localhost:2181
+
+Step 4: Send some messages, producer (broker)
+# the broker is listening on 9092...(listeners=PLAINTEXT://:9092)
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic hell2
+what the hell is going on?
+what the hell are you doing?
+
+Step 5: Start a consumer (zookeeper)
+# --from-beginning  (from the beginning to consume the production....
+kafka-console-consumer.sh --zookeeper localhost:2181 --topic hell2 --from-beginning
+
+查看所有topic详细信息：kafka-topics.sh --describe --zookeeper localhost:2181
+查看指定topic详细信息：kafka-topics.sh --describe --zookeeper localhost:2181 --topic hell2
+------------------------------------------------------------------------------------------	
+
+------------------------------------多节点多broker-------------------------------------	
+server.properties
+	log.dirs=/home/hadoop/app/tmp/kafka-logs
+	listeners=PLAINTEXT://:9092
+	broker.id=0
+	
+server-1.properties
+	log.dirs=/home/hadoop/app/tmp/kafka-logs-1
+	listeners=PLAINTEXT://:9093
+	broker.id=1
+
+server-2.properties
+	log.dirs=/home/hadoop/app/tmp/kafka-logs-2
+	listeners=PLAINTEXT://:9094
+	broker.id=2
+
+Step 2: Start the server
+kafka-server-start.sh $KAFKA_HOME/config/server.properties &
+kafka-server-start.sh $KAFKA_HOME/config/server-1.properties &
+kafka-server-start.sh $KAFKA_HOME/config/server-2.properties &
+
+Step 3: Create a topic
+kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 1 --topic hell3
+
+Step 4: produce some messages (brokers)
+bin/kafka-console-producer.sh --broker-list localhost:9092, localhost:9093, localhost:9094 --topic hell3
+what the hell is going on?
+what the hell are you doing?
+
+Step 5: Start a consumer 
+kafka-console-consumer.sh --zookeeper localhost:2181 --topic hell3 --from-beginning
+
+---------------------------------------------------------------------------------------
+
+----------------------------flume到kafka的数据采集-------------------------------------
+# avro-memory-kafka.conf:
+
+avro-memory-kafka.sources = avro-source
+avro-memory-kafka.channels = memory-channel
+avro-memory-kafka.sinks = kafka-sink
+
+avro-memory-kafka.sources.avro-source.type = avro
+avro-memory-kafka.sources.avro-source.command = tail -F /var/log/secure
+avro-memory-kafka.sources.avro-source.shell = /bin/bash -c
+
+avro-memory-kafka.sinks.avro-source.type = avro
+avro-memory-kafka.sinks.avro-source.hostname = 192.168.12.122
+avro-memory-kafka.sinks.avro-source.port = 44444
+
+# in flume1.6 version...
+avro-memory-kafka.sinks.kafka-sink.type = org.apache.flume.sink.kafka.KafkaSink
+avro-memory-kafka.sinks.kafka-sink.brokerList = 192.168.12.122:9092, 192.168.12.122:9093
+avro-memory-kafka.sinks.kafka-sink.topic = hell3
+avro-memory-kafka.sinks.kafka-sink.batchSize = 5 # 尽量(在一定时间内)等待到5条消息才一起发出去
+
+avro-memory-kafka.channels.memory-channel.type = memory
+
+avro-memory-kafka.sources.avro-source.channels = memory-channel
+avro-memory-kafka.sinks.kafka-sink.channel = memory-channel
+---------------------------------------------------------------------------------------
