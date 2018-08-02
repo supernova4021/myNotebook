@@ -48,16 +48,19 @@ kafka-console-consumer.sh --zookeeper localhost:2181 --topic hell2 --from-beginn
 server.properties
 	log.dirs=/home/hadoop/app/tmp/kafka-logs
 	listeners=PLAINTEXT://:9092
+	zookeeper.connect=localhost:2181
 	broker.id=0
 	
 server-1.properties
 	log.dirs=/home/hadoop/app/tmp/kafka-logs-1
 	listeners=PLAINTEXT://:9093
+	zookeeper.connect=localhost:2181
 	broker.id=1
 
 server-2.properties
 	log.dirs=/home/hadoop/app/tmp/kafka-logs-2
 	listeners=PLAINTEXT://:9094
+	zookeeper.connect=localhost:2181
 	broker.id=2
 
 Step 2: Start the server
