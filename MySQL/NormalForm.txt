@@ -1,0 +1,17 @@
+1NF: atomic
+
+2NF: 完全依赖于主键，不存在部分依赖
+partial dependency 
+eg.
+author: author_id, author_name
+book: book_id, isbn
+author_book: author_id, book_id, isbn //'isbn' partially depends on primary keys(author_id, book_id)
+
+3NF: 不存在传递依赖，都直接依赖于主键
+transitive dependency
+eg.
+review: review_id, star, star_meaning, user_id
+star_meaning --> star --> review_id
+
+BCNF: 消除对主键子集的依赖，使其都依赖于整个主键
+比如说，主键是(k1,k2,k3)，而非主键属性a1不能只依赖于(k1,k2)
