@@ -1,0 +1,11 @@
+rsync.sh:
+#!/usr/bin/expect
+
+set timeout 30
+spawn rsync -az imply-2.6.4/ 10.110.63.162:app/imply-2.6.4/
+expect "password:"
+exp_send "Dreams@2017\r"
+spawn rsync -az imply-2.6.4/ 10.110.63.163:app/imply-2.6.4/
+expect "password:"
+exp_send "Dreams@2017\r"
+interact
