@@ -1,0 +1,49 @@
+﻿简介：
+* 中间件，提供协调服务
+* 作用于分布式系统
+* 提供Java和C的客户端API
+
+特性：
+* 一致性
+* 原子性
+* 单一视图：客户端连接集群中的任意zk节点，数据都是一致的
+* 可靠性：每次对zk的操作状态都会保存在服务端
+* 实时性
+
+zoo.cfg:
+# The number of milliseconds of each tick(时间单元，所有时间的计算都是以这个为单元)
+tickTime=2000
+
+# The number of ticks that the initial 
+# synchronization phase can take 
+# (从节点连接并同步到master允许的初始化时间(timeout))
+# 10*tickTime
+initLimit=10
+
+# The number of ticks that can pass between 
+# sending a request and getting an acknowledgement(heartbeat)
+syncLimit=5
+
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just 
+# example sakes.
+dataDir=/home/hadoop/app/tmp/zk
+dataLogDir=/home/hadoop/app/tmp/zk/dataLogDir
+
+# the port at which the clients will connect
+clientPort=2181
+
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+#maxClientCnxns=60
+#
+# Be sure to read the maintenance section of the 
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+#autopurge.snapRetainCount=3
+# Purge task interval in hours
+# Set to "0" to disable auto purge feature
+#autopurge.purgeInterval=1
