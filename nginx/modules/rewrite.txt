@@ -1,0 +1,29 @@
+rewrite url
+Syntax: rewrite regex replacement [flag]
+Default: ---
+Context: server, location, if  (priority:server--->location--->if) 
+
+eg1. 
+# 当网站正处于维护中而无法访问时重定向所有请求到maintain页面
+rewrite ^(.*)$ /pages/maintain.html break
+
+eg2.
+# 当user_agent是MSIE时，将url加上/msie前缀
+if($http_user_agent ~ MSIE){
+   rewrite ^(.*)$ /msie/$1 break;
+}
+
+eg3.
+rewrite ^/course-(\d+)-(\d+)-(\d+)\.html /course/$1/$2/course_$3.html break
+/course-11-22-33.html ----> /course/11/22/course_33.html
+
+eg4.
+# 当请求的文件不存在时，重定向到百度
+if(!-f $request_filename) {
+    rewrite ^/(.*)$ https://www.baidu.com/s?wd=$1 redirect
+}
+-----------flag---------
+break(find the rewrited url, if not found, then stop): stops processing the current set of ngx_http_rewrite_module directives as with the break directive;
+last(if not found, then starts a search for a new location(rewrited url)...): stops processing the current set of ngx_http_rewrite_module directives and starts a search for a new location matching the changed URI;
+redirect(first return 302, then return 200(rewrited url)): returns a temporary redirect with the 302 code; used if a replacement string does not start with “http://”, “https://”, or “$scheme”;
+permanent(permanently redirect---client will save the rewrited url, next request will directly requests the rewrited url): returns a permanent redirect with the 301 code.
