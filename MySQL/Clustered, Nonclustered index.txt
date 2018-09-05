@@ -1,0 +1,5 @@
+ Clustered indexes are usually the primary key and determine how the data is actually stored in the table. 
+ 聚簇索引把数据都聚集到一起，就表示数据的实际存储位置，如主键...
+ 
+ Non-clustered indexes sort a reference to data that is still fast but doesn't actually determine how the data is structured.  
+ 非聚簇索引是一种引用，指向数据的位置
