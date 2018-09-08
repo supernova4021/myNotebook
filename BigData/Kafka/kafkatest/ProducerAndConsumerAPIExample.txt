@@ -1,0 +1,287 @@
+************************Scala --- producer*****************************************
+
+import java.util.{Date, Properties}
+
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+
+import scala.util.Random
+
+object ScalaProducerExample extends App {
+  val events = args(0).toInt
+  val topic = args(1)
+  val brokers = args(2)
+  val rnd = new Random()
+  val props = new Properties()
+  props.put("bootstrap.servers", brokers)
+  props.put("client.id", "ScalaProducerExample")
+  props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+  props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+
+
+  val producer = new KafkaProducer[String, String](props)
+  val t = System.currentTimeMillis()
+  for (nEvents <- Range(0, events)) {
+    val runtime = new Date().getTime()
+    val ip = "192.168.2." + rnd.nextInt(255)
+    val msg = runtime + "," + nEvents + ",www.example.com," + ip
+    val data = new ProducerRecord[String, String](topic, ip, msg)
+
+    //async
+    //producer.send(data, (m,e) => {})
+    //sync
+    producer.send(data)
+  }
+
+  System.out.println("sent per second: " + events * 1000 / (System.currentTimeMillis() - t))
+  producer.close()
+}
+*************************************************************************************
+
+************************Scala --- consumer*****************************************
+import java.util.concurrent._
+import java.util.{Collections, Properties}
+
+import kafka.consumer.KafkaStream
+import kafka.utils.Logging
+import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
+
+import scala.collection.JavaConversions._
+
+class ScalaConsumerExample(val brokers: String,
+                           val groupId: String,
+                           val topic: String) extends Logging {
+
+  val props = createConsumerConfig(brokers, groupId)
+  val consumer = new KafkaConsumer[String, String](props)
+  var executor: ExecutorService = null
+
+  def shutdown() = {
+    if (consumer != null)
+      consumer.close();
+    if (executor != null)
+      executor.shutdown();
+  }
+
+  def createConsumerConfig(brokers: String, groupId: String): Properties = {
+    val props = new Properties()
+    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers)
+    props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId)
+    props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true")
+    props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000")
+    props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000")
+    props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
+    props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
+    props
+  }
+
+  def run() = {
+    consumer.subscribe(Collections.singletonList(this.topic))
+
+    Executors.newSingleThreadExecutor.execute(    new Runnable {
+      override def run(): Unit = {
+        while (true) {
+          val records = consumer.poll(1000)
+
+          for (record <- records) {
+            System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset())
+          }
+        }
+      }
+    })
+  }
+}
+
+object ScalaConsumerExample extends App {
+  val example = new ScalaConsumerExample(args(0), args(1), args(2))
+  example.run()
+}
+*************************************************************************************
+
+************************Java --- consumer*****************************************
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+
+import java.util.Collections;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * 消费者例子.
+ *
+ */
+public class ConsumerExample {
+	private final KafkaConsumer<String,String> consumer;
+	private final String topic;
+	private ExecutorService executor;
+	private long delay;
+
+
+	public ConsumerExample(Properties props, String topic) {
+		consumer = new KafkaConsumer<>(props);
+		this.topic = topic;
+	}
+
+	public void shutdown() {
+		if (consumer != null)
+			consumer.close();
+		if (executor != null)
+			executor.shutdown();
+	}
+
+	public void run() {
+		consumer.subscribe(Collections.singletonList(this.topic));
+
+		Executors.newSingleThreadExecutor().execute(() -> {
+			while(true) {
+				try {
+					ConsumerRecords<String, String> records = consumer.poll(1000);
+					for (ConsumerRecord<String, String> record : records) {
+						System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset());
+					}
+				}catch(Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
+	}
+
+	/**
+	 * consumer 配置.
+	 * 
+	 * @param brokers brokers
+	 * @param groupId 组名
+	 * @return
+	 */
+	private static Properties createConsumerConfig(String brokers, String groupId) {
+		Properties props = new Properties();
+		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+		props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+		props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+		props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
+		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+
+		//props.put("auto.commit.enable", "false");
+		
+		return props;
+	}
+
+	public static void main(String[] args) throws InterruptedException {
+		String brokers = args[0];
+		String groupId = args[1];
+		String topic = args[2];
+		Properties props = createConsumerConfig(brokers, groupId);
+		ConsumerExample example = new ConsumerExample(props, topic);
+		example.run();
+
+		Thread.sleep(24*60*60*1000);
+		
+		example.shutdown();
+	}
+}
+*************************************************************************************
+
+************************Java --- producer*****************************************
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+
+import java.util.Date;
+import java.util.Properties;
+import java.util.Random;
+
+/**
+ * Producer例子，可以往topic上发送指定数量的消息.
+ * 消息格式为: 发送时间,编号,网址,ip
+ */
+public class ProducerExample {
+    public static void main(String[] args) {
+        long events = Long.parseLong(args[0]);
+        String topic = args[1];
+        String brokers = args[2];
+        Random rnd = new Random();
+
+        Properties props = new Properties();
+        props.put("bootstrap.servers", brokers);
+        props.put("client.id", "ProducerExample");
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+
+        KafkaProducer<String, String> producer = new KafkaProducer<String, String>(props);
+
+        long t = System.currentTimeMillis();
+        for (long nEvents = 0; nEvents < events; nEvents++) {
+            long runtime = new Date().getTime();
+            String ip = "192.168.2." + rnd.nextInt(255);
+            String msg = runtime + "," + nEvents + ",www.example.com," + ip;
+            try {
+                //async
+                producer.send(new ProducerRecord<String, String>(topic, ip, msg), (recordMetadata,e) ->{});
+                //sync
+
+                producer.send(new ProducerRecord<String, String>(topic, ip, msg)).get();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        System.out.println("sent per second: " + events * 1000 / (System.currentTimeMillis() - t));
+        producer.close();
+    }
+}
+*************************************************************************************
+
+************************Simple Partitioner*****************************************
+import kafka.utils.VerifiableProperties;
+import org.apache.kafka.clients.producer.Partitioner;
+import org.apache.kafka.common.Cluster;
+
+import java.util.Map;
+
+/**
+ * 简单分区类.
+ * 得到ip地址的最后一个数，然后对分区数取余. 
+ */
+public class SimplePartitioner implements Partitioner {
+
+
+	public int partition(Object key, int numPartitions) {
+		int partition = 0;
+		String stringKey = (String) key;
+		int offset = stringKey.lastIndexOf('.');
+		if (offset > 0) {
+			partition = Integer.parseInt(stringKey.substring(offset + 1)) % numPartitions;
+		}
+		return partition;
+	}
+
+	@Override
+	public int partition(String s, Object o, byte[] bytes, Object o1, byte[] bytes1, Cluster cluster) {
+		int totalP = cluster.partitionCountForTopic(s);
+
+		int partition = 0;
+		String stringKey = (String) o;
+		int offset = stringKey.lastIndexOf('.');
+		if (offset > 0) {
+			partition = Integer.parseInt(stringKey.substring(offset + 1)) % totalP;
+		}
+		return partition;
+	}
+
+	@Override
+	public void close() {
+
+	}
+
+	@Override
+	public void configure(Map<String, ?> map) {
+
+	}
+}
+*************************************************************************************
+
