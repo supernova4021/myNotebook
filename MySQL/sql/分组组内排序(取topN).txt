@@ -1,0 +1,18 @@
+select * from  
+(select   
+ version,time  
+from   
+  table  
+order by time desc) t  
+group by version  
+order by time desc 
+
+
+select * from  
+(select   
+ version,time  
+from   
+  table  
+order by time desc) t  
+group by version  
+order by time desc limit 5
