@@ -1,0 +1,7 @@
+服务器上设置Cookie
+Set-Cookie: ['aa=22; max-age=2', 'bb=333']
+或
+Set-Cookie: 'dd=213'
+
+客户端下次请求会带上Cookie
+Cookie: aa=22; bb=333

@@ -1,0 +1,8 @@
+Last-Modified：服务器设置Last-Modified的值后写入header发给client，client下次请求会带着这个值过来If-Modified-Since，
+然后服务器可以对比这两个值是否相等再决定是否使用缓存（原样写回Last-Modified的值然后返回空即表示使用缓存）
+
+Etag，数据签名，消息摘要(md5)或取哈希值。client下次请求会带着这个值过来If-Match或If-Non-Match
+服务器可以对比资源的签名是否一样来决定是否使用缓存（原样写回Etag的值然后返回空即表示使用缓存）
+
+
+这些只是语义上的，实际上要做什么还是要由服务器来决定

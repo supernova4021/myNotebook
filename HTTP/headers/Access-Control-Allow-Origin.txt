@@ -1,0 +1,17 @@
+所谓跨域请求问题，只是浏览器不允许而已，跨域请求其实已经发送且已返回结果
+
+服务器上response写个头
+"Access-Control-Allow-Origin" : "*"， 可允许该请求跨域
+
+用script标签可以随便跨域
+
+
+默认无法发送预请求的Method和Content-Type：
+Method: GET、HEAD、POST
+Content-Type: text/plain, multipart/form-data, application/x-www-form-urlencoded
+
+
+其他的需要发送预请求(通过OPTIONS请求)验证是否允许跨域
+'Access-Control-Allow-Headers': 'X-Test=Cors'
+'Access-Control-Allow-Methods': 'POST, PUT, DELETE'
+'Access-Control-Max-Age': '1000'  //经过一次预请求之后，在有效时间内下次请求无需再次发送预请求

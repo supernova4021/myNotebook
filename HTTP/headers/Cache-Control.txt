@@ -1,0 +1,21 @@
+e.g.
+'Cache-Control': 'max-age=200, public, no-transform'
+----------------------常用------------------------
+public: 所有的服务器(经过的代理服务器)都可以缓存
+private: 只有发起请求的client可以缓存
+no-cache: 可以使用缓存，但每次都需要先去服务器验证
+max-age=<seconds>
+------------------------------------------------------
+
+s-maxage=<seconds> (代理服务器用)
+max-stale=<seconds> (即便已经过期，只要在这个stale时间有效内仍可使用)
+
+must-revalidate
+proxy-revalidate
+
+no-store: 彻底不能使用缓存
+
+no-transform: 不要随便改变资源(压缩传输之类的那些是不允许的)
+
+
+并不是强制的，只是声明性的，只是建议代理服务器按照这个规范去做
