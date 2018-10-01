@@ -1,0 +1,4 @@
+对应请求体内容的mime type
+
+references to mime types
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types

@@ -1,0 +1,7 @@
+e.g.
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+
+split by ',' q=0.9 is weight
+
+references to mime types
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types

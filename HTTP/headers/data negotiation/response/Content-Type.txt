@@ -1,0 +1,6 @@
+
+references to mime types
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+
+
+'X-Content-Type': 'nosinff'  //让浏览器不要随意猜测返回的内容类型...已经很少用了
