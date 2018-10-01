@@ -1,0 +1,58 @@
+heap
+
+k ---> 1....N
+parent: k/2
+children: 2*k, 2*k+1
+
+//上浮
+void rise(int k){
+	while(k > 1 && heap[k/2] < heap[k]){
+		swap(heap[k/2], heap[k]);
+		k /= 2; 
+	}
+}
+
+//下沉
+void sink(int k){
+	while(2*k < N){
+		int child = 2*k;
+		if(child < N && heap[child] < heap[child+1]){
+			child++;//point to the bigger child
+		}
+		if(heap[k] > heap[child]){//already satisfied
+			break;
+		}
+		swap(heap[k], heap[child]);
+		k *= 2;
+	}
+}
+
+void insert(int val){
+	heap[++N] = val;
+	rise(N);
+}
+
+void delMax(){
+	int max = heap[1];
+	swap(1, N);
+	delete(heap[N])
+	N--;
+	sink(1);
+	return max;
+}
+
+void heapSort(int[] nums){
+	int N = nums.length;
+	int[] heap = nums;
+	//构建堆
+	for(int k=N/2; k>=1; k--){
+		sink(k);
+	}
+	
+	while(N > 1){
+		swap(heap[1], heap[N]); //把第一个元素(最大元素)与末尾元素交换
+		N--;
+		sink(1, N); //重新调整成最大堆
+	}
+
+}
