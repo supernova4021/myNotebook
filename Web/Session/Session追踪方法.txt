@@ -1,0 +1,10 @@
+①　URL重写 
+    将JSESSIONID重写在url上
+
+②　隐藏表单域 
+    将JSESSIONID写在到HTML隐藏表单元素上(<input type='hidden' name='sessionId' value='....' />)
+
+③　Cookie
+
+③　Session
+    session.setAttribute("user", ....)
