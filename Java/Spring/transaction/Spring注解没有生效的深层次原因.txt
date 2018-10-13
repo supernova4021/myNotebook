@@ -1,0 +1,37 @@
+/**
+ * Created by Administrator on 2018/10/13.
+ */
+public class Test {
+    /**
+     * 父事务
+     * 需求：
+     * 1. parent必须要调用child
+     * 2. child方法不是那么重要，也就是child成功与不成功对parent的执行是没有影响的
+     *
+     * 预期效果：
+     * 1. child回滚
+     * 2. parent插入成功
+     *
+     */
+    @Transactional
+    public void parent(){
+        try{
+            /*直接这样调用this.child()，相当于直接把child的代码copy过来执行，并没有为其做AOP代理，因此就没有注解上的事务加入*/
+            //child();
+
+            //必须要获取到当前的AOPProxy( 需要先暴露AOP代理到ThreadLocal， <aop:aspectj-autoproxy expose-proxy="true">)
+            //然后通过这个aop proxy来调用child方法
+            AopContext.currentProxy.child();
+
+        }catch (Exception e){
+            System.out.println("child exception:" + e.getMessage());
+        }
+    }
+
+    @Transactional(propagation=Propagation.REQUESTS_NEW)
+    public void child() {
+        //do someting....
+        int a = 1/0;
+        System.out.println(a);
+    }
+}
