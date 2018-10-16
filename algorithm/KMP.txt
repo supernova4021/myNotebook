@@ -1,0 +1,36 @@
+// str: 主串,  pstr: 模式串
+int kmp(char[] str, char[] pstr){
+	int[] next = getNextArray(pstr);
+	int i=0, j=0;
+	while(i<str.length && j<pstr.length){
+		if(str[i] == pstr[j]){
+			i++;
+			j++;
+		}else if(next[j] == -1){//模式串的第一个字符
+			i++;
+		}else{
+			j = next[j];
+		}
+	}
+	return j == pstr.length ? i-j : -1;
+}
+
+int[] getNextArray(char[] pstr){
+	int[] next = new int[pstr.length];
+	next[0] = -1;
+	next[1] = 0;
+	int i = 2;
+	int prefixNext = 0;
+	while(i < pstr.length){
+	     //  abcx*****abcy
+         // x is pstr[prefixNext], y is pstr[i-1] 		 
+		if(pstr[i-1] == pstr[prefixNext]){
+			next[i++] = prefixNext++;
+		}else if(prefixNext > 0){
+			prefixNext = next[prefixNext]; //prefixNext则跳转回之前已匹配的最长前后缀相等位置
+		}else{
+			next[i++] = 0;
+		}
+	}
+	return next;
+}
