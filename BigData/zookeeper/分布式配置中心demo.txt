@@ -1,0 +1,35 @@
+/**
+ *
+ * 分布式配置中心demo
+ *
+ **/
+public class ZooKeeperProSync implements Watcher{
+	
+	private static CountDownLatch connectedSemphore = new CountDownLatch(1);
+	private ZooKeeper zk = null;
+	private static Stat stat = new Stat(); //用来存放节点的状态
+	
+	public static void main(String[] args) throws Exception{
+		String path = "/username"; //数据存放路径
+		
+		//连接zk并注册一个默认的监听器
+		// parameters: ip, sessionTimeout, watcher
+		zk = new ZooKeeper("192.168.0.22:2181", 5000, new ZooKeeperProSync());
+		
+		connectedSemphore.await();//等待zk连接成功
+		
+		//获取path节点数据并注册默认监听器，true表示拿到数据后继续监听该节点
+		System.out.println(new String(zk.getData(path, true, stat)));
+		
+	}
+	
+	public void process(WatchedEvent event){
+		if(KeeperState.SyncConnected == event.getState(){
+			if(EventType.None == event.getType() && null == event.getPath()){ 
+				connectedSemphore.countDown();
+			}else if(event.getType() == EventType.NodeDataChanged){
+				System.out.println("configuration has changed, new value is " + new String(zk.getData(event.getPath(), true, stat)));
+			}
+		}
+	}
+}
