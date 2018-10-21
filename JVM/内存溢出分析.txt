@@ -1,0 +1,2 @@
+1. 配置-XX:+HeapDumpOnOutOfMemoryError参数dump在OOM时出堆文件
+2. 使用eclipse memory analyzer分析dump出来的java_pidxxx.hprof文件(dominator_tree)
