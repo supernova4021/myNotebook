@@ -6,7 +6,7 @@
 用script标签可以随便跨域
 
 
-默认无法发送预请求的Method和Content-Type：
+默认无需发送预请求的Method和Content-Type：
 Method: GET、HEAD、POST
 Content-Type: text/plain, multipart/form-data, application/x-www-form-urlencoded
 
