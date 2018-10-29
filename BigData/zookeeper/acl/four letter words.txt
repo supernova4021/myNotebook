@@ -1,0 +1,31 @@
+state
+*************stat************
+echo stat | nc localhost 2181
+
+
+are you ok~~
+*************ruok************  
+echo ruok | nc localhost 2181
+
+dump出会话和临时节点
+*************dump************  
+echo dump | nc localhost 2181
+
+
+conf
+
+
+cons (connections)
+
+
+envi (environment)
+
+mntr (monitor trace)
+
+wchs (watchers)
+
+
+*************wchc, wchp************  
+需要在zoo.cfg文件中开启
+41w.commands.whitelist=...
+ 

@@ -1,0 +1,7 @@
+添加zkServer.sh脚本中的启动参数(zookeeper.DigestAuthenticationProvider.superDigest)来激活超级用户
+nohup "$JAVA" "-Dzookeeper.log.dir=${ZOO_LOG_DIR}" "-Dzookeeper.root.logger=${ZOO_LOG4J_PROP}" \
+"-Dzookeeper.DigestAuthenticationProvider.superDigest=myroot:XASFNJAKFJasfFjfoNFLLDrnA=" \
+-cp "$CLASSPATH" $JVMFLAGS $ZOOMAIN "$ZOOCFG" > "$_ZOO_DAEMON_OUT" 2>&1 < /dev/null &
+
+# super user login
+addauth digest myroot:12345
