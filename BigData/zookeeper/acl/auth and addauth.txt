@@ -1,0 +1,6 @@
+# 添加一个用户
+# 执行这个命令之后，之后所有的操作都在testuser:password22用户下进行
+addauth digest testuser:password22
+
+# 为testuser用户增加对/test/aaa目录的权限
+setAcl /test/aaa auth:testuser:password22:cdrwa
