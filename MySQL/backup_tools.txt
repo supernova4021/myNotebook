@@ -1,0 +1,3 @@
+mysqldump --master-data=2 -single-transaction
+
+xtrabackup --slave-info
