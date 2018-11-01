@@ -1,0 +1,36 @@
+***************clickhouse***************
+1. Blazing Fast
+列式存储的DBMS，一个单机节点上每秒能处理十亿行数据、几十G的数据
+
+2. Linearly Scalable
+允许增加机器到集群中来水平扩展存储容量和计算能力
+
+3. Hardware Efficient
+
+4. Fault Tolerant
+
+*********************Kylin*********************
+1. Extremely Fast OLAP Engine at Scale
+减少在Hadoop/Spark中的查询延迟
+
+2. ANSI SQL Interface on Hadoop/Spark
+提供标准SQL查询功能
+
+3. Interactive Query Capability
+可交互式的查询，用户可以在亚秒级查询Hadoop数据，比hive查询要快得多
+
+4. MOLAP Cube
+用户能够在Kylin里为百亿以上数据集定义数据模型并构建立方体(多维度查询)
+
+5. Seamless Integration with BI Tools
+Kylin提供与BI工具的整合能力，如Tableau，PowerBI/Excel，MSTR，QlikSense，Hue和SuperSet
+
+
+*********************Druid*********************
+1. 列式存储
+2. 流式或批量数据摄取
+3. 倒排索引
+4. Flexible schemas, schemas可逐步进化、支持嵌套数据
+5. Time-optimized partitioning
+6. SQL support
+7. 水平可扩展，提供亚秒级查询
