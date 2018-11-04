@@ -1,0 +1,11 @@
+# remove all exited containers
+docker rm $(docker container ls -f "status=exited" -aq)
+
+# remove images
+docker rmi <imageID or REPOSITORY:TAG>
+
+# create a new image from a container
+docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
+
+# 以交互式的方式运行image
+docker run -it me/centos /bin/bash

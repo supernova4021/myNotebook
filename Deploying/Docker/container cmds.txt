@@ -1,0 +1,21 @@
+*****************exe*****************
+docker exec -it 11a321812u0jda python
+docker exec -it 11a321812u0jda /bin/bash
+docker exec -it 11a321812u0jda ip a
+
+
+docker rm $(docker ps -aq)
+
+
+docker inspect 11a321812u0jda
+
+docker logs 11a321812u0jda
+
+.......................
+
+..............
+
+限制容器内存
+docker run --memory=200M me/stree --vm 1
+限制CPU占用的权重
+docker run --cpu-shares=10 

@@ -1,0 +1,8 @@
+Dockerfile:
+  1 FROM centos
+  2 RUN yum install -y vim
+
+docker build -t me/centos-with-vim .
+
+由于image是只读的，因此要从image中build出image来得先创建一个临时的container，
+安装完vim之后再commit出一个新的image来
