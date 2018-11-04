@@ -1,0 +1,6 @@
+通过：
+ENTRYPOINT ["/usr/bin/stree"]
+CMD []
+来接收参数
+
+docker run -it asofhansfoj1j1o23 --vm 1
