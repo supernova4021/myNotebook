@@ -1,0 +1,14 @@
+
+-----------------building------------------------
+..............
+Status: Downloaded newer image for python:2.7
+ ---> 3c43a5d4034a
+Step 2/6 : LABEL maintainer="me<123124@qq.com>"
+ ---> Running in 8190fdecf096
+Removing intermediate container 8190fdecf096
+ ---> 6bf3d62734b8
+Step 3/6 : RUN pip install flask
+ ---> Running in 93d2d3e06eab
+ ...................
+docker run -it a0d79074418c /bin/bash 可进入临时的image中(如果还没被Removing intermediate....)
+
