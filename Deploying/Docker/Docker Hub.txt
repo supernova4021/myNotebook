@@ -1,0 +1,23 @@
+类似github，是一个Images托管平台
+
+向Docker Hub发布镜像时推荐与github关联使用Dockerfile来发布，
+Docker Hub会在后台根据这个Dockerfile build出镜像来
+这样的镜像才更安全没病毒
+
+向dockerhub上push镜像：
+docker login
+username:
+passowrd:
+docker push REPOSITORY(userID/imageName):TAG
+
+可以使用registry镜像来搭建自己的docker hub
+docker build -t 10.82.33.222:5000/hello-world
+
+vim /etc/docker/daemon.json
+{ "insecure-registries":["10.82.33.222:5000 "]}
+vim /lib/systemd/system/docker.service
+EnvironmentFile=-/etc/docker/daemon.json
+
+restart
+
+docker push 10.82.33.222:5000/hello-world
