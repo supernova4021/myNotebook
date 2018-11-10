@@ -1,0 +1,16 @@
+[root@izwz9hujytgo8v5v9yx4enz ~]# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+73a4fcb08fab        bridge              bridge              local
+386f02ababcd        host                host                local
+88e3eb2ceaa7        none                null                local
+
+create a bridge：
+sudo docker network create -d bridge my-bridge
+
+连接到自己创建的bridge上：
+sudo docker run -d --name busybox3 --network my-bridge centos /bin/sh -c "while true; do sleep 3600; done"
+
+将my-bridge与busybox2相连：
+sudo docker network connect my-bridge busybox2
+
+如果各个containers都连接到相同的自定义的bridge上，则默认是已经相互link好了(可相互通过名字ping通)

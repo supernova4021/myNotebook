@@ -1,0 +1,11 @@
+启动busybox1：
+sudo docker run -d --name busybox1 centos /bin/sh -c "while true; do sleep 3600; done"
+
+启动busybox2并link到busybox1("busybox1"在busybox2中即是busybox1的ip)：
+sudo docker run -d --name busybox2 --link busybox1 centos /bin/sh -c "while true; do sleep 3600; done"
+
+在busybox2中可ping通busybox1：
+sudo docker exec -it busybox2 /bin/sh
+ping busybox1
+
+如访问busybox1中的mysql服务时, busybox1:3306即可（不过实际还有更方便的方法）
