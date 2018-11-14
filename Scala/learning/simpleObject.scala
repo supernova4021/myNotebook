@@ -20,6 +20,14 @@ object ScalaTutotial{
 			print(i+" ")
 		}
 		
+		/*  : _*  */
+		def sum(args: Int*) = {
+			var result = 0
+			for (arg <- args) result += arg
+			result
+		}
+		println(sum(1 to 5: _*)) //将 1 to 5转化为参数序列, 1 to 5 ---> 1, 2, 3, 4, 5
+		
 		/*double loop*/
 		// i=0 then j=100,101,102,103...  i=1 then j=100,101,102....
 		for(i <- 0 to 10; j <- 100 to 110)
