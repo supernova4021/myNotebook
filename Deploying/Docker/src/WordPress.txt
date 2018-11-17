@@ -1,0 +1,10 @@
+docker pull mysql:5.7
+docker pull wordpress
+
+创建mysql容器
+docker run -d --name mysql -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=wordpress mysql:5.7
+
+创建wordpress容器
+docker run -d -e WORDPRESS_DB_HOST=mysql:3306 --link mysql -p 8080:80 wordpress
+
+这种部署方式使用的container过多时就会显得有点恶心~建议使用Docker Compose
