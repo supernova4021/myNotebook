@@ -1,0 +1,5 @@
+docker run -d -v /root/html:/usr/share/nginx/html -p 80:80 --name web me/nginx
+使
+本地目录/root/html
+容器中的目录/usr/share/nginx/html
+保持同步

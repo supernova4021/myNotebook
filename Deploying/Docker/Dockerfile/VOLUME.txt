@@ -1,0 +1,5 @@
+VOLUME /var/lib/mysql (需要持久化的路径，mount容器内/var/lib/mysql的数据到本地/var/lib/docker/volumes/...目录下)
+
+sudo docker run -d -v mysql:/var/lib/mysql --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql
+加上-v mysql:/var/lib/mysql表示使用名为'mysql'的这个volume将容器中/var/lib/mysql目录挂载到本地
+默认情况下docker会为不同container创建不同的volume
