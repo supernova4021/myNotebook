@@ -1,0 +1,3 @@
+Parallelism is about doing lot of things at once.
+
+Concurrency is about dealing lot of things at once.
