@@ -1,0 +1,178 @@
+UDF：一进一出
+
+实现方法：
+1. 继承UDF类
+2. 重写evaluate方法
+3. 将该java文件编译成jar
+4. 在终端输入如下命令：
+hive> add jar test.jar;
+ 
+hive> create temporary function function_name as 'com.hrj.hive.udf.UDFClass';
+ 
+hive> select function_name(t.col1) from table t;
+ 
+hive> drop temporary function function_name;
+
+UDAF(User defined aggregate functions)：多进一出
+
+实现方法: 
+1，用户的UDAF必须继承了org.apache.hadoop.hive.ql.exec.UDAF；
+2，用户的UDAF必须包含至少一个实现了org.apache.hadoop.hive.ql.exec的静态类，诸如实现了 UDAFEvaluator
+3，一个计算函数必须实现的5个方法的具体含义如下：
+init()：主要是负责初始化计算函数并且重设其内部状态，一般就是重设其内部字段。一般在静态类中定义一个内部字段来存放最终的结果。
+
+iterate()：每一次对一个新值进行聚集计算时候都会调用该方法，计算函数会根据聚集计算结果更新内部状态。当输 入值合法或者正确计算了，则       就返回true。
+
+terminatePartial()：Hive需要部分聚集结果的时候会调用该方法，必须要返回一个封装了聚集计算当前状态的对象。
+
+merge()：Hive进行合并一个部分聚集和另一个部分聚集的时候会调用该方法。
+
+terminate()：Hive最终聚集结果的时候就会调用该方法。计算函数需要把状态作为一个值返回给用户。
+
+
+
+4.部分聚集结果的数据类型和最终结果的数据类型可以不同。
+UDTF(User defined tabular function)：一进多出
+
+实现方法：
+1. 继承org.apache.hadoop.hive.ql.udf.generic.GenericUDTF
+
+2.initialize()：UDTF首先会调用initialize方法，此方法返回UDTF的返回行的信息（返回个数，类型）
+
+3.process：初始化完成后，会调用process方法,真正的处理过程在process函数中，在process中，每一次forward() 调用产生一行；如果产生多列      可以将多个列的值放在一个数组中，然后将该数组传入到forward()函数
+4.最后close()方法调用，对需要清理的方法进行清理
+
+
+
+********************UDF(user defined function)******************
+
+---------------实现步骤(Java创建自定义UDF类)----------------
+
+自定义一个java类
+继承UDF类
+重写evaluate方法
+打包类所在项目成一个all-in-one的jar包并上传到hive所在机器
+在hive中执行add jar操作，将jar加载到classpath中。
+在hive中创建模板函数，使得后边可以使用该函数名称调用实际的udf函数
+hive sql中像调用系统函数一样使用udf函数
+
+----------------代码实现----------------
+
+功能要求：实现当输入字符串超过2个字符的时候，多余的字符以”…”来表示。 
+如“12”则返回“12”，如“123”返回“12…”
+自定义类、继承UDF、重写evaluate方法已在代码中体现
+package com.tianliangedu.hive.udf;
+import org.apache.hadoop.hive.ql.exec.UDF;
+/*
+ * 功能：实现当输入字符串超过2个字符的时候，多余的字符以"..."来表示。
+ * 输入/输出：* 如“12”则返回“12”，如“123”返回“12..."
+ */
+public class ValueMaskUDF extends UDF{
+       public String evaluate(String input,int maxSaveStringLength,String replaceSign) {
+             if(input.length()<=maxSaveStringLength){
+                    return input;
+             }
+             return input.substring(0,maxSaveStringLength)+replaceSign;
+       }
+       public static void main(String[] args) {
+             System.out.println(new ValueMaskUDF().evaluate("河北省",2,"..."));;
+       }
+}
+
+
+上传jar包至hive操作环境中
+
+进入到自己的所操作的hive环境目录中。
+rz命令上传至服务器上
+
+加载jar包、声明函数、使用函数
+
+加载jar包
+
+进入到hive cli中（输入hive即可进入）
+将jar包加入hive 交互中
+
+add jar的shell 
+add jar /home/hive/tianliangedu_course/04_udf/TlHadoopCore-jar-with-dependencies.jar;
+
+声明函数 
+create temporary function mask as ‘com.tianliangedu.hive.udf.ValueMaskUDF’;
+
+使用函数 
+..........
+
+
+********************UDAF(user defined aggregation function)******************
+
+---------------实现步骤---------------
+
+自定义一个java类
+继承UDAF类
+内部定义一个静态类，实现UDAFEvaluator接口
+实现方法init,iterate,terminatePartial,merge,terminate，共5个方法. 
+在hive中执行add jar操作，将jar加载到classpath中。
+在hive中创建模板函数，使得后边可以使用该函数名称调用实际的udf函数
+hive sql中像调用系统函数一样使用udaf函数
+
+功能要求：实现与hive原生的count相似的计数功能。
+
+如select count(1) from tablename 或者select key,count(1) from tablename group by key;
+
+源码
+package com.tianliangedu.hive.udaf;
+import org.apache.hadoop.hive.ql.exec.UDAF;
+import org.apache.hadoop.hive.ql.exec.UDAFEvaluator;
+import org.apache.log4j.Logger;
+/**
+* 自行实现sql的count操作
+*/
+//主类继承UDAF
+public class DIYCountUDAF extends UDAF {  
+    //日志对象初始化,使访类有输出日志的能力
+    public static Logger logger=Logger.getLogger(DIYCountUDAF.class);
+
+    //静态类实现UDAFEvaluator
+    public static class Evaluator implements UDAFEvaluator {  
+        //设置成员变量，存储每个统计范围内的总记录数
+        private int totalRecords;  
+        //初始化函数,map和reduce均会执行该函数,起到初始化所需要的变量的作用
+        public Evaluator() {  
+            init();  
+        }  
+        //初始化，初始值为0,并日志记录下相应输出
+        public void init() {  
+            totalRecords = 0;  
+            logger.info("init totalRecords="+totalRecords);
+        }  
+        //map阶段，返回值为boolean类型，当为true则程序继续执行，当为false则程序退出  
+        public boolean iterate(String input) {
+            //当input输入不为空的时候，即为有值存在,即为存在1行，故做+1操作
+            if (input != null) {  
+                totalRecords += 1;  
+            }  
+            //输出当前组处理到第多少条数据了
+            logger.info("iterate totalRecords="+totalRecords);
+            return true;  
+        }  
+        /**
+         * 类似于combiner,在map范围内做部分聚合，将结果传给merge函数中的形参mapOutput  
+         * 如果需要聚合，则对iterator返回的结果处理，否则直接返回iterator的结果即可
+         */
+        public int terminatePartial() {  
+            logger.info("terminatePartial totalRecords="+totalRecords);
+            return totalRecords;  
+        }
+
+        // reduce 阶段，用于逐个迭代处理map当中每个不同key对应的 terminatePartial的结果
+        public boolean merge(int mapOutput) {  
+            totalRecords +=mapOutput;  
+            logger.info("merge totalRecords="+totalRecords);
+            return true;  
+        }  
+        //处理merge计算完成后的结果，此时的count在merge完成时候，结果已经得出，无需再进一次对整体结果做处理，故直接返回即可
+        public int terminate() {  
+            logger.info("terminate totalRecords="+totalRecords);
+            return totalRecords;  
+        }  
+    }  
+}    
