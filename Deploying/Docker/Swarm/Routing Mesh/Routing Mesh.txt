@@ -1,0 +1,8 @@
+Internal --- container与container之间的访问通过overlay网络
+(通过虚拟IP
+e.g.
+对于service myservice
+nslookup myservice会始终返回一个相同的IP
+nslookup tasks.myservice则会返回service在各个container中具体的IP，swarm根据该映射关系来负载均衡)
+
+Ingress --- 可以通过任意swarm节点访问相应的服务接口
