@@ -1,0 +1,21 @@
+docker playground：https://labs.play-with-docker.com
+
+1.创建一个manager   (192.168.0.28)
+docker swarm init --advertise-addr=192.168.0.28
+
+2.add a worker to the swarm  (192.168.0.27)
+docker swarm join --token SWMTKN-1-56kjbfrv8pwna6f0dgcds5buin8ts302pvssf79271uhjuv0m9-3h5pgnr5qx02omqt2t3o0496l 192.168.0.28:2377
+
+3.add a worker to the swarm  (192.168.0.26)
+docker swarm join --token SWMTKN-1-56kjbfrv8pwna6f0dgcds5buin8ts302pvssf79271uhjuv0m9-3h5pgnr5qx02omqt2t3o0496l 192.168.0.28:2377
+
+docker node ls
+
+4.创建一个service
+docker service create --name ubuntu ubuntu sh -c "while true; do sleep 3333; done"
+
+5.横向扩展service 
+(将各个container均匀分布在各个节点上，当某个container发生故障退出，swarm会自动在cluster中挑一个节点再启动一个container)
+docker service scale ubuntu=10
+
+docker service ps ubuntu 

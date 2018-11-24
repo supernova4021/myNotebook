@@ -1,0 +1,10 @@
+1.创建一个overlay网络，使容器之前能跨机器通信
+docker network create -d overlay demo
+
+2.创建mysql服务
+docker service create --name mysql -env MYSQL_ROOT_PASSWORD=root --env MYSQL_DATABASE=wordpress --network demo --mount type=volume,source=mysql-data,destination=/var/lib/mysql mysql
+
+3.创建wordpress服务
+docker service create --name wordpress -p 80:80 --env WORDPRESS_DB_PASSWORD=root --env WORDPRESS_DB_HOST=mysql --netword demo wordpress
+
+从任意的manager或worker的ip都可访问该wordpress服务(RountingMesh)
