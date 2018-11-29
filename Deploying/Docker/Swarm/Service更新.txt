@@ -1,0 +1,8 @@
+先scale service
+docker service scale web=2
+
+更新镜像(docker会先停掉其中一个container，重启新的container，然后再停掉另一个container，再重启一个新的)
+docker service update --image me/python-flask-demo:2.0 demo
+
+更新端口(会有中断)
+docker service update --publish-rm 8080:5000 --publish-add 8088:5000 web
