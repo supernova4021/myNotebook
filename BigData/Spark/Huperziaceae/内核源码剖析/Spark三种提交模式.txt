@@ -1,0 +1,4 @@
+1、Spark内核架构，其实就是第一种模式，standalone模式，基于Spark自己的Master-Worker集群。
+2、第二种，是基于YARN的yarn-cluster模式。
+3、第三种，是基于YARN的yarn-client模式。
+4、如果，你要切换到第二种和第三种模式，很简单，将我们之前用于提交spark应用程序的spark-submit脚本，加上--master参数，设置为yarn-cluster，或yarn-client，即可。如果你没设置，那么，就是standalone模式。
