@@ -1,0 +1,12 @@
+A Deployment controller provides declarative updates for Pods and ReplicaSets.
+
+kubectl get deployment
+
+update a image in the deployment：
+kubectl set image deployment nginx-deployment nginx=nignx:1.13
+
+-----版本管理----
+查看版本历史：
+kubectl rollout history deployment nignx-deployment
+回滚到上一个版本
+kubectl rollout undo deployment nignx-deployment

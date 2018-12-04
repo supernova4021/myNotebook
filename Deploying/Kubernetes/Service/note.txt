@@ -1,0 +1,16 @@
+kubectl expose命令创建一个service
+e.g.
+kubectl expose pods nginx-pod
+kubectl expose deployment service-test
+
+service主要有三种：
+ClusterIP: 这个service的ip是不会变化的
+NodePort: 将端口映射到cluster中的每一个node上(在每个node上都可以访问这个端口)
+LoadBalancer (集群外访问（负载均衡）)
+
+另外也可使用DNS，但需要DNS的add-on
+
+
+更新一个service：
+kubectl edit deployment service-test
+可以使用Rolling Update来实现不停机更新

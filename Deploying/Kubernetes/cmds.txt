@@ -1,0 +1,22 @@
+create a pod
+kubectl create -d pod_nginx.yml
+
+查看pod
+kubectl get pods -o wide
+
+进去pod的容器中(默认进入第一个)
+kubectl exec -it nginx sh
+
+kubectl describe pods nginx
+
+
+kubectl get rc
+kubectl get pods
+kubectl get rs
+kubectl get deployment
+
+kubectl scale rc nginx --replicas=4
+
+kubectl create -f rc_nginx.yml
+
+

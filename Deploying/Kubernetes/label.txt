@@ -1,0 +1,38 @@
+k8s几乎所有资源都可以设置label
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  ports:
+  - port: 8080
+    nodePort: 8080
+    targetPort: nginx-port
+    protocol: TCP
+  selector:   //选择app=nginx标签的pod来启动一个service
+    app: nginx
+  type: NodePort
+
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-pod
+  labels:
+    app: busybox
+spec:
+  nodeSelector:  //只会在含有hardware=good这个label的node上启动这个pod
+    hardware: good
+  containers:
+  - name: busybox-container
+    image: busybox
+    command:
+      - sleep
+      - "360000"
+
+
+//给w1节点设置一个label
+kubectl label node w1 hardware=good

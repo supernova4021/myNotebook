@@ -1,0 +1,26 @@
+
+
+--------Minikube(single node)----
+https://github.com/kubernetes/minikube
+Minikube is a tool that makes it easy to run Kubernetes locally. Minikube runs a single-node Kubernetes cluster inside a VM on your laptop for users looking to try out Kubernetes or develop with it day-to-day.
+
+
+-------Kubeadm(multi node)-----
+https://github.com/kubernetes/kubeadm
+
+
+-------kops---------
+https://github.com/kubernetes/kops
+
+
+------tectonic------
+https://coreos.com/tectonic/
+
+
+------Play with Kubernetes----
+https://labs.play-with-k8s.com/
+
+------Kubernetes The Hard Way-----
+https://github.com/kelseyhightower/kubernetes-the-hard-way
+Bootstrap Kubernetes the hard way on Google Cloud Platform. No scripts.
+
