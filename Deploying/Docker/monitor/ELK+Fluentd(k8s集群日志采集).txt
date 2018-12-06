@@ -1,0 +1,4 @@
+https://github.com/kubernetes/kubernetes/tree/master/cluster/fluentd-elasticsearch
+
+必须为所有的node打上这个label，fluentd才能进行日志采集
+kubectl label node --all beta.kubernetes.io/fluentd-ds-ready=true

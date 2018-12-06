@@ -1,0 +1,10 @@
+docker top 99ffa032sca
+
+docker stats
+
+——----weavescope----——
+图形化监控与管理容器
+
+
+——----Heapster+Grafana+InfluxDB----——
+https://github.com/kubernetes-retired/heapster
