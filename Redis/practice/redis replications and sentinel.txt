@@ -1,0 +1,39 @@
+--------------------redis-7000.conf(master)---------------
+port 7000
+daemonize yes
+pidfile /var/run/redis-7000.pid
+logfile "7001.log"
+dir "/opt/soft/redis/data"
+
+
+--------------------redis-7001.conf(slave)---------------
+port 7001
+daemonize yes
+pidfile /var/run/redis-7001.pid
+logfile "7001.log"
+dir "/opt/soft/redis/data"
+slaveof 127.0.0.1 7000
+
+
+--------------------redis-7002.conf(slave)---------------
+port 7002
+daemonize yes
+pidfile /var/run/redis-7002.pid
+logfile "7001.log"
+dir "/opt/soft/redis/data"
+slaveof 127.0.0.1 7000
+
+
+--------------------sentinel-26379.conf(sentinel)---------------
+port 26379
+dir /opt/soft/redis/data/
+logfile "26379.log"
+sentinel monitor mymaster 127.0.0.1 7000 2
+sentinel down-after-milliseconds mymaster 30000
+sentinel parallel-syncs mymaster 1
+sentinel failover-timeout mymaster 180000
+# 运行后redis会重写该文件，去掉默认配置，自动发现slave节点信息
+
+
+redis-server redis-7000.conf
+redis-sentinel sentinel-26379.conf
