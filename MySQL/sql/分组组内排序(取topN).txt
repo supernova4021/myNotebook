@@ -1,3 +1,64 @@
+how would you get the 2 oldest people in each group?
++--------+-------+-----+
+| Person | Group | Age |
++--------+-------+-----+
+| Bob    | 1     | 32  |
+| Jill   | 1     | 34  |
+| Shawn  | 1     | 42  |
+| Jake   | 2     | 29  |
+| Paul   | 2     | 36  |
+| Laura  | 2     | 39  |
++--------+-------+-----+
+
+result：
++--------+-------+-----+
+| Shawn  | 1     | 42  |
+| Jill   | 1     | 34  |
+| Laura  | 2     | 39  |
+| Paul   | 2     | 36  |
++--------+-------+-----+
+
+1、row_number
+select person, `group`, age
+from 
+(
+   select person, `group`, age,
+      (@num:=if(@group = `group`, @num +1, if(@group := `group`, 1, 1))) row_number 
+  from test t
+  CROSS JOIN (select @num:=0, @group:=null) c
+  order by `Group`, Age desc, person
+) as x 
+where x.row_number <= 2;
+
+
+2. 使用union(组多时就有点可怕了)
+(
+  select *
+  from mytable 
+  where `group` = 1
+  order by age desc
+  LIMIT 2
+)
+UNION ALL
+(
+  select *
+  from mytable 
+  where `group` = 2
+  order by age desc
+  LIMIT 2
+)
+
+
+3. count
+SELECT a.person, a.group, a.age FROM person AS a WHERE 
+(SELECT COUNT(*) FROM person AS b 
+WHERE b.group = a.group AND b.age >= a.age) <= 2 
+ORDER BY a.group ASC, a.age DESC
+
+
+
+
+-------------------------下面的写法是不对的----------------------
 select * from  
 (select   
  version,time  
