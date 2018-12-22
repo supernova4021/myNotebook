@@ -1,4 +1,0 @@
-a chain of handler
-A ---> B ---> C ---> D ---> E
-the one that can't the thing, then pass it to the next chain,
-otherwise, just handle it and return
