@@ -1,0 +1,86 @@
+---------------Mistake #1-----------------------
+6 Nodes
+each node has 16 cores
+each node has 64GB of RAM
+
+一次提交一个spark应用上去，如何最大化计算效率？
+--num-executors
+--executor-cores
+--executor-memory
+
+Answer #1 -- Most granular (Wrong)
+Have smallest sized executors as possible
+1 core each
+Total of 16 X 6 = 96 cores
+96 executors
+64/16 = 4GB per executor (per node)
+---Not using benefits of running multiple tasks in same JVM(每个节点开了16个JVM)
+
+Answer #2 -- Least granular (Wrong)
+6 executors
+64GB memory each
+16 cores each
+---Need to leave some memory overhead for OS/Hadoop daemons(OS/Hadoop后台进程也需要一些开销)
+
+Correct answer
+  -spark.yarn.executor.overhead for off heap memory like direct buffers
+   Default is max(0.07*spark.executor.memory)
+  -YARN AM needs a core
+  -HDFS Throughput(need some cores too)
+  
+5 cores per executor
+ - For max HDFS throughput
+Cluster has 6*15=90 cores in total(after taking out Hadoop/Yarn daemon cores)
+90 cores / 5 cores/executor = 18 executors
+1 executor for AM => 17 executors
+Each node has 3 executors
+63GB / 3 = 21GB, 21GB*(1-0.07) ~~ 19GB (counting off heap memory)
+17 executors
+19 GB memory each
+5 cores each
+
+
+---------------Mistake #2-----------------------
+Application failure
+java.lang.IllegalArgumentException: Size exceeds Integer.MAX_VALUE
+Why?
+  -No Spark shuffle block can be greater than 2 GB
+Default number of partitions to use when doing shuffles is 200
+  -This low number of partitions leads to high shuffle block size
+  
+What can I do?
+  -Increase the number of partitions
+    Thereby, reducing the average partition size (rule of thumb: 128 MB per partition is recommended)
+	spark.sql.shuffle.partitions rdd.repartition() or rdd.coalesce()
+  -Get rid of skew in your data
+  -If #partitions < 2000, but close, bump to just > 2000
+  
+  
+---------------Mistake #3-----------------------
+Skew and Cartesian Join
+
+
+---------------Mistake #4-----------------------
+Shuffle
+--use ReduceByKey instead of GroupByKey
+  ReduceByKey can do almost anything that GroupByKey can do
+--use TreeReduce instead of Reduce
+  TreeReduce only sends the answers to the driver
+  If you do the Reduce, it will send all the data back to the driver(driver do the reduce)
+ 
+
+---------------Mistake #5----------------------- 
+Exception in thread "main" java.lang.NoSuchMethodError
+--You tried to use a library outside of spark with spark(outside library conflict with spark library)
+If you are using a different library that conflict with spark, you can use this lines:
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-shade-plugin</artifactId>
+  <version>2.2</version>
+.........
+<relocations>
+   <relocation>
+     <pattern>com.google.protobuf</pattern>
+	 <shadedPattern>com.company.my.protobuf</shadedPattern>
+   </relocation>
+</relocations>
