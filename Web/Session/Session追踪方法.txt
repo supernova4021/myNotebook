@@ -5,6 +5,3 @@
     将JSESSIONID写在到HTML隐藏表单元素上(<input type='hidden' name='sessionId' value='....' />)
 
 ③　Cookie
-
-③　Session
-    session.setAttribute("user", ....)
