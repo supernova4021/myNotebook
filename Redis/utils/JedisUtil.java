@@ -1,4 +1,3 @@
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +28,7 @@ public class JedisUtil {
      /** 对存储结构为HashMap类型的操作 */
      public Hash HASH = new Hash();
      /** 对存储结构为Set(排序的)类型的操作 */
-     public SortSet SORTSET = new SortSet();
+     public SortSet SORTEDSET = new SortSet();
      private static JedisPool jedisPool = null;  
          
      private JedisUtil() {   
@@ -521,6 +520,13 @@ public class JedisUtil {
             returnJedis(jedis);
             return s;
         }
+		
+		public long zadd(String key, int score, String member) {
+            Jedis jedis = getJedis();
+            long s = jedis.zadd(key, score, member);
+            returnJedis(jedis);
+            return s;
+        }
 
         /*public long zadd(String key, Map<Double, String> scoreMembers) {
             Jedis jedis = getJedis();
@@ -620,10 +626,10 @@ public class JedisUtil {
          *  String member
          * @return long 位置
          * */
-        public long zrank(String key, String member) {
+        public Long zrank(String key, String member) {
             
-            Jedis sjedis = getJedis(); 
-            long index = sjedis.zrank(key, member);
+            Jedis sjedis = getJedis();
+            Long index = sjedis.zrank(key, member);
             returnJedis(sjedis);
             return index;
         }
