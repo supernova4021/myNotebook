@@ -2,7 +2,7 @@ option java_package = "com.proto";
 option java_outer_classname = "PlayerModule";
 
 message PBPlayer{
-	required int64 playerId = 1;//这些1,2,3,4表示字段的key(更省空间), 如 '1':playerId
+	required int64 playerId = 1;//filed number, 这些1,2,3,4表示字段的key(更省空间), 如 '1':playerId
 	
 	required int32 age = 2;
 	
