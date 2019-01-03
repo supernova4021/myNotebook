@@ -1,0 +1,3 @@
+查看log得知是kafka indexing service OffsetOutOfRangeException
+This means that Kafka index tasks are not able to consume at rate by which messages are being produced by Kafka producers. You have set resetOffsetAutomatically which tells Index tasks to skip to the latest offset whenever the next offset that the task was going to consume got deleted from Kafka partition most probably because of Kafka retention. The way to solve is to increase taskCount so that more tasks consume the events in parallel.
+Reset一下Supervisor（datasource）就好了
