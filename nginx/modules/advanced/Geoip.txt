@@ -1,0 +1,25 @@
+获取IP的地域信息，基于MaxMind(https://www.maxmind.com )的GeoIP二进制文件进行匹配
+
+
+需要yum install nginx-module-geoip
+
+
+geoip_country /lib/nginx/geoip/GeoIP.dat; # GeoIP二进制文件
+geoip_city /lib/nginx/geoip/GeoLiteCity.dat;
+
+server {
+    .......
+
+    location /myip {
+        default_type text/plain;
+        return 200 "$remote_addr $geoip_country_name $geo_city";
+
+    }
+
+    location /myip {
+        if($geoip_country_code != CN){
+           return 403;
+	}
+	....
+    }
+}

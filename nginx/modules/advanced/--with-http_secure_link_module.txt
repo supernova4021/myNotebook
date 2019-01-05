@@ -1,0 +1,31 @@
+1.检查请求链接的真实性及保护资源不经未授权的访问
+2.设置链接的有效期
+
+e.g.
+client                             server
+点击下载按钮        ---->        生成下载链接
+          
+	  《-------------------
+	/download?md5=alifkqjnoiljhIFHNQAOFNO312&expires=124151155
+	(md5包含uri、密钥、过期时间等信息摘要出来的)
+
+            download request
+          ------------------->       校验
+
+                  downloading
+	        <---------------
+
+
+
+location / {
+   secure_link $arg_md5,$arg_expires; # 取url上的md5, expires这两个参数值
+   secure_link_md5 "$secure_link_expires$uri token:bbb"; # 将这个字符串进行md5，然后与上面的$arg_md5做比对
+
+   if($secure_link = ""){
+      return 403;
+   }
+
+   if($secure_link = "0"){
+      return 410;
+   }
+}
