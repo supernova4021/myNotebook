@@ -1,0 +1,2 @@
+Its is an reverse proxy which works as an entry point for all your APIs. 
+It has features like Authentication, SSL termination, Routing, Load Balancing, Monitoring and Billing. 
