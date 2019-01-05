@@ -1,0 +1,10 @@
+server {
+  listen 443;
+  
+  ssl on;
+  ssl_cerificate /etc/nginx/ssl_key/me.crt; #Ö¤ÊéÎ»ÖÃ
+  ssl_cerificate_key /etc/nginx/ssl_key/me.key; # Ë½Ô¿
+  
+  ....
+
+}

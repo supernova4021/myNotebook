@@ -1,0 +1,16 @@
+server {
+  listen 443;
+  
+  ssl on;
+  
+  ssl_session_cache shared:SSL:10m; #设置session缓存
+  ssl_session_timeout 10m;
+  
+  keepalive_timeout 100; # keepalive时间
+  
+  ssl_cerificate /etc/nginx/ssl_key/me.crt; #证书位置
+  ssl_cerificate_key /etc/nginx/ssl_key/me.key; # 私钥
+  
+  ....
+
+}
