@@ -1,0 +1,2 @@
+是按照conf.d目录下conf文件的顺序，最先读取到的配置
+先读取到的文件则加载该server，之后再读到重复server name的配置文件则不会重新加载该server

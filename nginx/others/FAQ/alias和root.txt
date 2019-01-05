@@ -1,0 +1,19 @@
+root就是以这个目录为root，
+拼接上location的路径来进行资源的定位
+
+e.g.
+location /path/img/ {
+   root /local/resource/;
+}
+则对于请求: http://xxx.xx.xxx/path/img/cat.png
+的实际查找路径为实际查找路径为/local/resource/path/img/cat.png
+
+
+而alias则是这个location的一个别名
+location /path/img/ {
+   alias /local/img/;
+}
+则对于请求: http://xxx.xx.xxx/path/img/cat.png
+的实际查找路径为实际查找路径为/local/path/img/cat.png
+
+ 

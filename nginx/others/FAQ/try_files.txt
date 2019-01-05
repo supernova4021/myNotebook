@@ -1,0 +1,12 @@
+
+ location / {
+    ....
+	# 如果$uri不存在则寻找$uri/backup
+	# 如果$uri/backup也不存在则交给@java_page location
+	try_files $uri $uri/backup @java_page; 
+ }
+ 
+ location @java_page {
+    proxy_pass http://127.0.0.1:9999;
+ }
+ 
