@@ -24,6 +24,12 @@ if(!-f $request_filename) {
 }
 -----------flag---------
 break(find the rewrited url, if not found, then stop): stops processing the current set of ngx_http_rewrite_module directives as with the break directive;
+根据重写后的url在root目录中寻找对应的文件，就停止在当前的location，不会再匹配其他location
+
 last(if not found, then starts a search for a new location(rewrited url)...): stops processing the current set of ngx_http_rewrite_module directives and starts a search for a new location matching the changed URI;
+根据重写后的url重新匹配定义的location(一次请求)
+
 redirect(first return 302, then return 200(rewrited url)): returns a temporary redirect with the 302 code; used if a replacement string does not start with “http://”, “https://”, or “$scheme”;
+两次请求，先返回302，然后客户端再用重写后的url再发起一次请求
+
 permanent(permanently redirect---client will save the rewrited url, next request will directly requests the rewrited url): returns a permanent redirect with the 301 code.
