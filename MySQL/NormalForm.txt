@@ -1,6 +1,6 @@
 1NF: atomic
 
-2NF: 完全依赖于主键，不存在部分依赖
+2NF: 完全依赖于主键，非主属性不存在部分依赖于主键
 partial dependency 
 eg.
 author: author_id, author_name
@@ -13,5 +13,5 @@ eg.
 review: review_id, star, star_meaning, user_id
 star_meaning --> star --> review_id
 
-BCNF: 消除对主键子集的依赖，使其都依赖于整个主键
-比如说，主键是(k1,k2,k3)，而非主键属性a1不能只依赖于(k1,k2)
+BCNF: 消除主属性对主键子集的依赖，使所有主属性对每一个不包含它的码是完全的函数依赖
+比如说，主键是(k1,k2,k3)，而主属性a1不能只依赖于(k1,k2)
