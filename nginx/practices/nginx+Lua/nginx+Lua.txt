@@ -1,0 +1,48 @@
+installation:
+1. LuaJIT
+2. ngx_devel_kit, lua-nginx-module
+reference: http://www.imooc.com/article/19597
+
+
+------Nginx调用lua-----
+设置nginx变量
+set_by_lua       #行代码
+set_by_lua_file  #指定执行lua文件
+
+请求处理阶段，做访问控制
+access_by_lua
+...
+
+处理请求内容
+content_by_lua
+....
+
+
+------Nginx lua API-----
+ngx.var
+ngx.req.get_headers
+ngx.say
+ngx.print
+.....
+
+
+
+server{
+
+  ......
+  
+  location /myip {
+    default_type 'text/plain';
+	content_by_lua '
+	      clientIp = ngx.req.get_headers()["x_forwarded_for"]
+		  ngx.say("IP: ", clientIp)
+		  ';
+  }
+  
+  location / {
+    default_type "text/plain";
+	content_by_lua_file /opt/app/../../dep.lua;
+  
+  }
+  
+}
