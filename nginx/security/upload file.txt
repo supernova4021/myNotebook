@@ -1,0 +1,5 @@
+上传一张图片1.jpg(实际上是1.php)
+然后访问http://www.xxx.com/upload/1.jpg/1.php
+nginx将把1.jpg作为php代码执行
+
+解决办法：判断是否以php结尾，如果是直接return 403(图片location不应该执行php代码)
