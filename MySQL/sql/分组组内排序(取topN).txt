@@ -58,13 +58,21 @@ ORDER BY a.group ASC, a.age DESC
 
 
 
--------------------------下面的写法是不对的----------------------
+-------------------------5.7版本以上的MySql需要加个limit----------------------
+MySql 5.7对子查询进行了优化，认为子查询中的order by可以进行忽略，只要Derived table里不包含如下条件就可以进行优化：
+UNION clause
+GROUP BY
+DISTINCT
+Aggregation
+LIMIT or OFFSET
+
+
 select * from  
 (select   
  version,time  
 from   
   table  
-order by time desc) t  
+order by time desc limit 999999) t  
 group by version  
 order by time desc 
 
@@ -74,6 +82,6 @@ select * from
  version,time  
 from   
   table  
-order by time desc) t  
+order by time desc limit 999999) t  
 group by version  
 order by time desc limit 5
