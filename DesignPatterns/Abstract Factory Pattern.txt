@@ -1,0 +1,24 @@
+就是对一组具有相同主题的工厂进行封装；
+
+例如：生产一台PC机，使用工厂方法模式的话，一般会有cpu工厂，内存工厂，显卡工厂...但是使用抽象工厂模式的话，只有一个工厂就是PC工厂，但是一个PC工厂涵盖了cpu工厂，内存工厂，显卡工厂等要做的所有事；
+
+
+e.g.
+
+public class Main {
+    public static void main(String[] args) {
+        IFamilyFactory cnFamilyFactory = new ChineseFamilyFactory();
+        IFamilyFactory usFamilyFactory = new AmericanFamilyFactory();
+        
+        IFather cnFather = cnFamilyFactory.createFather("cn father-test");
+        IMother cnMother = cnFamilyFactory.createMother("cn mother-test");
+        
+        IFather usFather = usFamilyFactory.createFather("us father-test");
+        IMother usMother = usFamilyFactory.createMother("us mother-test");
+        
+        cnFather.printName();
+        cnMother.printName();
+        usFather.printName();
+        usMother.printName();
+    }
+}

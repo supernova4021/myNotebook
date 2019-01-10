@@ -1,0 +1,2 @@
+When a method returns one of serveral possible classes that share a common super class
+
