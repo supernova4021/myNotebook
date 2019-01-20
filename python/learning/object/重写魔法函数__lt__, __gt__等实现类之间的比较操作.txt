@@ -1,0 +1,3 @@
+使用functools包下的total_ordering则只需实现__lt__, __eq__即可拥有<=, >= 等操作符比较的功能
+@total_ordering
+class MyClass...

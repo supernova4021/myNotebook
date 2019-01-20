@@ -1,0 +1,13 @@
+class Attr(object):
+	
+	def __get__(self, instance, cls):
+		return instance.__dict__['x']
+		
+	def __set__(self, instance, value):
+		instance.__dict__['x'] = value
+		
+	def __delete__(self, instance):
+		pass
+		
+class Person(object):
+	name = Attr()
