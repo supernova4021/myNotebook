@@ -21,3 +21,8 @@ EnvironmentFile=-/etc/docker/daemon.json
 restart
 
 docker push 10.82.33.222:5000/hello-world
+
+
+自己搭建registry
+harbor  https://github.com/goharbor/harbor
+docker registry  https://hub.docker.com/_/registry
