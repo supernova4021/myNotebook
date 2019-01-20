@@ -1,0 +1,4 @@
+https://labs.play-with-docker.com
+
+可以用这个playground来学习练习集群的部署
+直接点exposed的端口即可用浏览器访问
