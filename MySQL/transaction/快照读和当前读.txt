@@ -1,0 +1,5 @@
+current read读到的数据始终是最新的版本
+(select ... lock in share mode, select ... for update , update, delete, insert)
+
+快照读(不加锁的非阻塞读)读到的可能是数据的历史版本(第一次执行读语句的时机很重要，
+如果在其他事务commit之后再执行快照读仍能读到数据最新版本)
