@@ -17,3 +17,6 @@ ExecStop=/bin/kill -s TERM $MAINPID
 
 [Install]
 WantedBy=multi-user.target
+
+查看service的日志：
+journalctl -f -u XXX
