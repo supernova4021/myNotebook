@@ -1,0 +1,10 @@
+-----scheduler preselect rules
+* NodiskConflict 
+* CheckNodeMemoryPressure
+* NodeSelector
+* FitResource
+* Affinity
+
+-----scheduler optimize-select rules
+* SelectorSpreadPriority
+....
