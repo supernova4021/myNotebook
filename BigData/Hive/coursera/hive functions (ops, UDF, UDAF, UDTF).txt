@@ -1,0 +1,36 @@
+1. operators 
+= != < > IS NULL ....
+
+2. UDF
+math: round, floor, ceil, exp, log, ...
+date: to_date, from_unixtimestamp,....
+conditional: if, isnull, case, coalsce
+string: char, concat, ....
+
+3. UDAF
+count, sum, min, max, corr, ....
+
+4. UDTF
+explode, posexplode, parse_url_tuple, ...
+
+-----usage-------
+show functions;
+desc function xxxx;
+desc function extended xxxx; (with some examples)
+
+customize:
+1. develop UD[.*]F
+2. compile to *.jar
+3.deploy to cluster
+
+hive> add jar /path/to/lib.jar;
+hive> create temporary function xxxx as "java.class.name";
+hive> select xxxx(...) ...;
+hive> drop temporary function xxxx;
+
+explain ....
+
+select manage_name, employee
+from management 
+lateral view explode(direct_reports) lateral_table
+as employee
