@@ -4,11 +4,11 @@ e.g.
 public: 所有的服务器(经过的代理服务器)都可以缓存
 private: 只有发起请求的client可以缓存
 no-cache: 可以使用缓存，但每次都需要先去服务器验证
-max-age=<seconds>
+max-age=<seconds>: 直接使用缓存而不必与服务器交互的缓存时间
 ------------------------------------------------------
 
 s-maxage=<seconds> (代理服务器用)
-max-stale=<seconds> (即便已经过期，只要在这个stale时间有效内仍可使用)
+max-stale=<seconds> (即便已经过期，只要在这个stale时间有效内仍可使用，只能在请求中设置max-stale才有效，缓存的时间可以为max-age和max-stale的和)
 
 must-revalidate
 proxy-revalidate
