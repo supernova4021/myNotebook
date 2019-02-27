@@ -1,0 +1,34 @@
+SparkContext 
+
+
+ 
+val lines = sc.textFile()
+val words = lines.flatMap(line => line.split(" "))
+val pairs = words.map(word => (word, 1))
+
+// 其实RDD里是没有reduceByKey的，因此对RDD调用reduceByKey()方法的时候，会触发scala的隐式转换；此时就会在作用域内，寻找隐式转换，会在RDD中找到rddToPairRDDFunctions()隐式转换，然后将RDD转换为PairRDDFunctions。
+// 接着会调用PairRDDFunctions中的reduceByKey()方法
+val counts = pairs.reduceByKey(_ + _)
+
+// 最终会调用SparkContext里面的dagScheduler.runJob(...)
+counts.foreach(count => println(count._1 + ": " + count._2))
+
+
+ /**
+   * 首先，hadoopFile()方法的调用，会创建一个HadoopRDD，
+     其实是(key, value) pair, key是hdfs或文本文件的每一行offset，value是文本行
+	 然后对HadoopRDD调用map()方法，会剔除key，只保留value，
+	 然后会获得一个MapPartitionsRDD
+	 MapPartitionsRDD内部的元素其实就是一行行的文本行
+   * Read a text file from HDFS, a local file system (available on all nodes), or any
+   * Hadoop-supported file system URI, and return it as an RDD of Strings.
+   */
+  def textFile(
+      path: String,
+      minPartitions: Int = defaultMinPartitions): RDD[String] = withScope {
+    assertNotStopped()
+    hadoopFile(path, classOf[TextInputFormat], classOf[LongWritable], classOf[Text],
+      minPartitions).map(pair => pair._2.toString)
+  }
+  
+ 
