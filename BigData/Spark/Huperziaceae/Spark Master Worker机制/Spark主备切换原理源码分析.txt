@@ -1,0 +1,31 @@
+org.apache.spark.deploy.master.Master
+
+/**
+ 完成Master的主备切换
+*/
+  private def completeRecovery() {
+    // Ensure "only-once" recovery semantics using a short synchronization period.
+    if (state != RecoveryState.RECOVERING) { return }
+    state = RecoveryState.COMPLETING_RECOVERY
+
+    // Kill off any workers and apps that didn't respond to us.
+	// 清理机制总结：1、从内存缓存结构中移除；2、从相关的组件的内存缓存中移除；3、从持久化存储中移除
+    workers.filter(_.state == WorkerState.UNKNOWN).foreach(removeWorker)
+    apps.filter(_.state == ApplicationState.UNKNOWN).foreach(finishApplication)
+
+    // Reschedule drivers which were not claimed by any workers
+    drivers.filter(_.worker.isEmpty).foreach { d =>
+      logWarning(s"Driver ${d.id} was not found after master recovery")
+      if (d.desc.supervise) {
+        logWarning(s"Re-launching ${d.id}")
+        relaunchDriver(d)
+      } else {
+        removeDriver(d.id, DriverState.ERROR, None)
+        logWarning(s"Did not re-launch ${d.id} because it was not supervised")
+      }
+    }
+
+    state = RecoveryState.ALIVE
+    schedule()
+    logInfo("Recovery complete - resuming operations!")
+  }
