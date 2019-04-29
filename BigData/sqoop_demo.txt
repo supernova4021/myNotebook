@@ -1,0 +1,7 @@
+hive -e "drop table mip.dmp_adslot"
+sqoop create-hive-table --connect jdbc:mysql://10.110.63.130:3306/ghac --username dmp --password Dreams@2017 --table dmp_adslot --hive-table mip.dmp_adslot --fields-terminated-by ',' --hive-overwrite
+sqoop import -D mapred.job.queue.name=important --connect jdbc:mysql://10.110.63.130:3306/ghac --username dmp --password Dreams@2017 --table dmp_adslot --hive-table mip.dmp_adslot --hive-import --fields-terminated-by ',' --hive-overwrite -m 1
+
+hive -e "drop table mip.dmp_creative"
+sqoop create-hive-table --connect jdbc:mysql://10.110.63.130:3306/ghac --username dmp --password Dreams@2017 --table dmp_creative --hive-table mip.dmp_creative --fields-terminated-by ',' --hive-overwrite
+sqoop import -D mapred.job.queue.name=important --connect jdbc:mysql://10.110.63.130:3306/ghac --username dmp --password Dreams@2017 --table dmp_creative --hive-table mip.dmp_creative --hive-import --fields-terminated-by ',' --hive-overwrite -m 1
