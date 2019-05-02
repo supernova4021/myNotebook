@@ -1,3 +1,6 @@
+********* 官方spark调优文档 ***********
+https://spark.apache.org/docs/latest/tuning.html
+
 ------ Spark性能优化概览---------
 
 由于Spark的计算本质是基于内存的，所以Spark性能程序的性能可能因为集群中的任何因素出现瓶颈：CPU、网络带宽、或者是内存。
