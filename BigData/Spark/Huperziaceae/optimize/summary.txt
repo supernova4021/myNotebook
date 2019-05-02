@@ -1,5 +1,12 @@
-********* 官方spark调优文档 ***********
+********** 官方spark调优文档 ***********
 https://spark.apache.org/docs/latest/tuning.html
+
+********** 调优三板斧 ***********
+*** 分配资源
+*** 并行度
+*** RDD持久化
+这三个是烤鸡，其他的broadcast、kryo、fastutil只是微调料
+还有shuffle调优、roupByKey换成reduceByKey是高级调料
 
 ------ Spark性能优化概览---------
 
