@@ -1,0 +1,23 @@
+1、聚合源数据
+2、过滤导致倾斜的key
+3、提高shuffle并行度：spark.sql.shuffle.partitions
+4、双重group by
+5、reduce join转换为map join：spark.sql.autoBroadcastJoinThreshold
+6、采样倾斜key并单独进行join
+7、随机key与扩容表
+
+由于Spark的这种都是基于RDD的特性；哪怕是Spark SQL，原本你是用纯的SQL来实现的；各位想一想，其实你用纯RDD，也能够实现一模一样的功能。
+
+之前使用在Spark Core中的数据倾斜解决方案，全部都可以直接套用在Spark SQL上。
+
+我们要讲一下，之前讲解的方案，如果是用纯的Spark SQL来实现，应该如何来实现。
+
+1、聚合源数据：Spark Core和Spark SQL没有任何的区别
+2、过滤导致倾斜的key：在sql中用where条件
+3、提高shuffle并行度：groupByKey(1000)，spark.sql.shuffle.partitions（默认是200）
+4、双重group by：改写SQL，两次group by
+5、reduce join转换为map join：spark.sql.autoBroadcastJoinThreshold（默认是10485760 ）
+  你可以自己将表做成RDD，自己手动去实现map join
+  Spark SQL内置的map join，默认是如果有一个小表，是在10M以内，默认就会将该表进行broadcast，然后执行map join；调节这个阈值，比如调节到20M、50M、甚至1G。20 971 520
+6、采样倾斜key并单独进行join：纯Spark Core的一种方式，sample、filter等算子
+7、随机key与扩容表：Spark SQL+Spark Core
