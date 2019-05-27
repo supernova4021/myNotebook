@@ -1,5 +1,8 @@
 import sys
 
+# usage
+# python2 auto_generate_slick_model.py < createTable.sql
+
 def scan_ddl():
     class D:
         def __init__(self, bs, fs, asst, collect):
