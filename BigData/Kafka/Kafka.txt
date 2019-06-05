@@ -7,6 +7,9 @@ Kafka架构
 	
 ********************************Kafka 0.9.0(may be outdated)***************************
 
+altering TTL
+bin/kafka-topics.sh --alter --zookeeper localhost:2181 --topic test --config retention.ms=10000
+
 ------------------------------------单节点单broker-------------------------------------	
 server.properties配置文件
 $KAFKA_HOME/config/server.properties:
