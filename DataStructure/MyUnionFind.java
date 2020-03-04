@@ -24,7 +24,6 @@ public class MyUnionFind {
         int r1 = root(p);
         int r2 = root(q);
         // Weighted Quick-Union
-        if(size[r1] == size[r2]) return;
         // always link the root of smaller tree to the root of larger tree
         if(size[r2] < size[r1]){
             ids[r2] = r1;
