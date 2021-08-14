@@ -1,7 +1,1 @@
-https://segmentfault.com/a/1190000014833443
-
-https://prestodb.github.io/docs/current/installation/cli.html
-
-presto --server 10.110.63.164:8080 --catalog hive --schema default --execute "select count(1) from mip.rpt_effect_base where pday = 20190428" > base_count.txt
-
 https://prestodb.github.io/docs/current/
